@@ -21,14 +21,16 @@ context/
 ├── summaries/
 │   └── main.md              # the living project summary — single source of truth
 ├── meetings/
-│   ├── transcripts/         # raw transcripts — ground truth, but messy
-│   ├── gemini-summaries/    # fast AI-generated summaries — lossy, sometimes overconfident paraphrasing
-│   ├── claude-summaries/    # reconciled, decision-focused summaries (see "summarise-meeting" below)
-│   └── scratch-summaries/   # rough/early drafts not yet reconciled
+│   ├── <name>.md             # reconciled, decision-focused summaries, directly in meetings/
+│   │                         # (see "summarise-meeting" below) — the trustworthy version, and
+│   │                         # the only thing here you normally need to read
+│   └── scratch/
+│       ├── transcripts/      # raw transcripts — ground truth, but messy
+│       └── gemini-summaries/ # fast AI-generated summaries — lossy, sometimes overconfident paraphrasing
 ├── communication/
-│   ├── emails/               # reformatted email threads (see email-formatting-guide.md)
-│   ├── direct-messages/      # chat/DM pastes
-│   └── email-formatting-guide.md
+│   ├── emails/               # reformatted email threads
+│   ├── direct-messages/      # reformatted chat/DM pastes
+│   └── offline/              # cleaned-up recaps of in-person/phone/unrecorded conversations
 ├── planning/                 # checklists, plan docs, one-off scripts (e.g. deck builders)
 └── notes/                    # freeform topic notes — notes-<subject>.md, one per subject.
                                # On a data-heavy project, split into notes/data/ to mirror
@@ -58,16 +60,16 @@ See `context/summaries/main.md` for a filled-in skeleton with prompts for each s
 
 Three intake paths — two backed by skills, one manual:
 
-1. **A meeting with a transcript** → the `summarise-meeting` skill. Cross-checks the fast Gemini auto-summary against the full raw transcript, catches places where the paraphrase doesn't match what was actually said, writes a reconciled decision-focused summary to `meetings/claude-summaries/`.
-2. **A chat log, an email thread, or a spoken conversation with no transcript at all** → the `add-project-context` skill. Extracts decisions, action items, and open questions from a pasted Google Chat log, a fetched Gmail thread, or your own recap of a conversation that was never recorded — and saves it into whichever of the structures above already fits (or into `summaries/main.md` directly for something that belongs at the top level, like a scope change).
+1. **A meeting with a transcript** → the `summarise-meeting` skill. Cross-checks the fast Gemini auto-summary against the full raw transcript, catches places where the paraphrase doesn't match what was actually said, writes a reconciled decision-focused summary directly to `meetings/<name>.md`.
+2. **A chat log, an email thread, or a spoken conversation with no transcript at all** → the `add-project-context` skill. First classifies which of the three it's looking at and reformats/archives it (verbatim, cleaned up) to the matching `communication/` subfolder — the skill itself carries the per-type formatting rules, so there's no separate style guide to consult. Then extracts decisions, action items, and open questions and saves those into whichever of the structures above already fits (or into `summaries/main.md` directly for something that belongs at the top level, like a scope change).
 3. **Manual notes** — written by hand into `notes/` (or a workstream subfolder) while working something out. Not skill-mediated, just following the same structure so it stays discoverable later instead of living only in a scratch file that gets deleted.
 
 ## Conventions
 
 - **`[[wikilink]]` cross-references.** `main.md` links out to topic notes by filename stem (e.g. "see `[[notes-gqv]]`"), Obsidian-style — keeps notes individually readable but connected without duplicating content into `main.md` itself.
 - **Date-stamp and attribute every logged decision.** `**Redefined 2026-07-14 (per Dewi)**`, not just "we changed this." A decision without a date and an owner is unverifiable later, and worse, un-overridable — nobody can tell if it's still current.
-- **Meeting filenames: `YYYYMMDD-attendee[-attendee2].md`.** Matched exactly across `transcripts/`, `gemini-summaries/`, and `claude-summaries/`, so the three can be cross-referenced by name alone and a missing pairing is obvious at a glance.
-- **Reformat emails, don't paraphrase them.** Light cleanup only — strip signature blocks and quote-nesting, reorder chronologically (oldest first) — but preserve exact numbers, dates, and commitments verbatim. See `context/communication/email-formatting-guide.md`.
+- **Meeting filenames: `YYYYMMDD-attendee[-attendee2].md`.** Matched exactly across `meetings/scratch/transcripts/`, `meetings/scratch/gemini-summaries/`, and the reconciled `meetings/<name>.md`, so the three can be cross-referenced by name alone and a missing pairing is obvious at a glance. `communication/{emails,direct-messages,offline}/` follow the same convention.
+- **Reformat communication, don't paraphrase it.** Light cleanup only per source type — strip email signature blocks/quote-nesting, strip chat read-receipts/reaction noise, lightly clean up an offline recap — but preserve exact numbers, dates, and commitments verbatim. Handled by the `add-project-context` skill, which carries the per-type rules directly rather than a separate style guide.
 - **Never commit raw client data or secrets.** A scratch/raw-data dump directory (e.g. `misc/`) stays gitignored. Treat the whole repo as if it could go public, even when it's private.
 
 ## Setting up a new project
@@ -86,5 +88,5 @@ are for.
 
 ## Related skills
 
-- [`add-project-context`](~/.claude/skills/add-project-context/) — pasted chat, Gmail, or spoken-conversation recap → structured context
+- [`add-project-context`](~/.claude/skills/add-project-context/) — pasted chat, Gmail, or spoken-conversation recap → verbatim archive under `communication/` + structured context in the decision log
 - [`summarise-meeting`](~/.claude/skills/summarise-meeting/) — transcript + AI summary → reconciled decision-focused summary

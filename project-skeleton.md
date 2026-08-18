@@ -51,7 +51,7 @@ repo/
                                follows. Template at repo/AGENTS.md — includes the
                                context-system workflow (summarise-meeting after every meeting,
                                add-project-context for everything else, read
-                               context/summaries/main.md + claude-summaries/ for orientation)
+                               context/summaries/main.md + meetings/ for orientation)
                                plus placeholders for the project-specific sections.
   README.md                    one-page human-facing scope summary
   config/
@@ -131,10 +131,11 @@ password manager or `.env` file outside the tracked/visible tree, referenced by 
 - **Settle folder names before the first working session.** Mid-project renames (this happened 3
   times on ES) break wikilinks every time and require a manual sweep to fix. Cheap to avoid by
   deciding names once at kickoff — this is exactly what this repo is for.
-- **Template the meetings pipeline (transcript → gemini-summary → reconciled claude-summary) from
-  day one**, not partway through. It was the single highest-value pattern this project produced —
-  built as a proper Claude Skill (`summarise-meeting`) — but only after ~15 meetings had already
-  accumulated as ad hoc notes (now `scratch-summaries/`).
+- **Template the meetings pipeline (transcript → gemini-summary → reconciled summary) from day
+  one**, not partway through. It was the single highest-value pattern this project produced — built
+  as a proper Claude Skill (`summarise-meeting`) — but only after ~15 meetings had already
+  accumulated as ad hoc notes on ES (in a `scratch-summaries/` folder since folded away — the
+  current template skips straight to `meetings/<name>.md` once the skill exists from day one).
 - **One notes file per source, one preprocessing script per source, one EDA/analysis section per
   source** — keeping these in 1:1:1 correspondence (same name, different folder) made
   cross-referencing trivial all project long.

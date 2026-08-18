@@ -16,27 +16,30 @@ the project, or at the start of a new session where project history matters, rea
 1. `context/summaries/main.md` — the living project summary: scope, team, timeline, data
    inventory, quirks, and a running "Key Decisions" table of what's confirmed vs. still open. The
    single fastest way to get a new session oriented.
-2. `context/meetings/claude-summaries/` — **not** `gemini-summaries/` or `transcripts/` directly.
-   `claude-summaries/` is the reconciled, fact-checked record; reading Gemini's raw summary instead
-   means re-trusting something already known to contain paraphrase errors, and reading raw
-   transcripts means redoing work that's already been done.
+2. `context/meetings/<name>.md` — **not** `meetings/scratch/gemini-summaries/` or
+   `meetings/scratch/transcripts/` directly. The reconciled files sitting directly in `meetings/`
+   are the fact-checked record; reading Gemini's raw summary instead means re-trusting something
+   already known to contain paraphrase errors, and reading raw transcripts means redoing work
+   that's already been done.
 3. `context/notes/` — per-topic deep dives (methodology, open questions, assumptions). On a
    data-heavy project these live in `context/notes/data/` and mirror `repo/scripts/preprocessing/`
    one-to-one by source name.
-4. Only fall back to a meeting's raw transcript/gemini-summary if no `claude-summary` exists yet
-   for it (i.e. it's still pending reconciliation) — check the discrepancies section of the newest
-   related `claude-summary` files first, since they often surface open items relevant to whatever
-   you're being asked about.
+4. Only fall back to a meeting's raw transcript/gemini-summary in `meetings/scratch/` if no
+   reconciled `meetings/<name>.md` exists yet (i.e. it's still pending reconciliation) — check the
+   discrepancies section of the newest related reconciled summaries first, since they often surface
+   open items relevant to whatever you're being asked about.
 
-Don't reconstruct project history from raw transcripts when a `claude-summary` already exists for
-that meeting — it's slower, and you'd be re-deriving something already verified.
+Don't reconstruct project history from raw transcripts when a reconciled `meetings/<name>.md`
+already exists for that meeting — it's slower, and you'd be re-deriving something already
+verified.
 
 ## Logging new context
 
 - **After each meeting**, run the `summarise-meeting` skill (`/summarise-meeting`) to reconcile the
-  Gemini transcript + AI summary into `context/meetings/claude-summaries/<name>.md`. Do this soon
-  after the meeting, not batched up — reconciliation works best while the transcript is easy to
-  spot-check and the decision log is still fresh context for catching discrepancies.
+  Gemini transcript + AI summary (read from `context/meetings/scratch/`) into
+  `context/meetings/<name>.md`. Do this soon after the meeting, not batched up — reconciliation
+  works best while the transcript is easy to spot-check and the decision log is still fresh context
+  for catching discrepancies.
 - **For everything else** — a pasted chat log, an email thread, a spoken conversation with no
   transcript — use the `add-project-context` skill to extract decisions/action items and file them
   into the right place under `context/`.
