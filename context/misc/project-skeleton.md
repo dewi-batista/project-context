@@ -78,7 +78,7 @@ repo-project/
                                pipeline order, repo layout, and the conventions every script
                                follows. Template at repo-project/AGENTS.md — includes the
                                context-system workflow (summarise-meeting after every meeting,
-                               add-project-context for everything else, read
+                               summarise-communication for everything else, read
                                context/main-summary.md + meetings/ for orientation)
                                plus placeholders for the project-specific sections.
   commit-guide.md              when/how to commit — see the file itself

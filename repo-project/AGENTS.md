@@ -11,36 +11,16 @@ as-is.
 ## Getting context
 
 `context/` (sibling to this repo, never git-tracked here) holds the project's durable history —
-see `~/Documents/project-context/README.md` for the full pattern. When asked to "get context" on
-the project, or at the start of a new session where project history matters, read in this order:
+see `~/Documents/project-context/README.md` for the full pattern. Run the `get-context` skill
+(`/get-context`) when asked to "get context" on the project, or at the start of a new session where
+project history matters — it has the full reading order, kept there as the single source of truth
+so it doesn't drift from this file.
 
-1. `context/main-summary.md` — the living project summary: scope, team, timeline, data
-   inventory, quirks, and a running "Key Decisions" table of what's confirmed vs. still open. The
-   single fastest way to get a new session oriented.
-2. `context/meetings/<name>.md` — **not** `meetings/scratch/gemini-summaries/` or
-   `meetings/scratch/transcripts/` directly. The reconciled files sitting directly in `meetings/`
-   are the fact-checked record; reading Gemini's raw summary instead means re-trusting something
-   already known to contain paraphrase errors, and reading raw transcripts means redoing work
-   that's already been done.
-3. `context/notes/`, if it exists — per-topic deep dives (methodology, open questions,
-   assumptions). Not scaffolded by default; created per-project once there's an actual need. On a
-   data-heavy project these live in `context/notes/data/` and mirror this repo's own
-   `scripts/preprocessing/` one-to-one by source name.
-4. Only fall back to a meeting's raw transcript/gemini-summary in `meetings/scratch/` if no
-   reconciled `meetings/<name>.md` exists yet (i.e. it's still pending reconciliation) — check the
-   discrepancies section of the newest related reconciled summaries first, since they often surface
-   open items relevant to whatever you're being asked about.
-
-Don't reconstruct project history from raw transcripts when a reconciled `meetings/<name>.md`
-already exists for that meeting — it's slower, and you'd be re-deriving something already
-verified.
-
-**Never read `context/communication/scratch/`.** Unlike `meetings/scratch/`, this isn't a
-fallback — it holds the untouched original of every email/DM/offline recap in
-`context/communication/{emails,direct-messages,offline}/`, written once by the
-`add-project-context` skill purely so the original format exists for a human's future reference.
-The cleaned-up versions in `communication/{emails,direct-messages,offline}/` are always the ones to
-read; there's no case where `scratch/` has information they don't.
+Two directories are always off-limits to read directly, regardless of what `get-context` says:
+`context/meetings/scratch/` (raw transcripts/gemini-summaries — read only as a documented fallback
+when no reconciled summary exists yet) and `context/communication/scratch/` (untouched
+communication originals, written once by the `summarise-communication` skill — never read back at
+all, purely a human's future-reference archive).
 
 ## Logging new context
 
@@ -50,8 +30,10 @@ read; there's no case where `scratch/` has information they don't.
   works best while the transcript is easy to spot-check and the decision log is still fresh context
   for catching discrepancies.
 - **For everything else** — a pasted chat log, an email thread, a spoken conversation with no
-  transcript — use the `add-project-context` skill to extract decisions/action items and file them
-  into the right place under `context/`.
+  transcript — use the `summarise-communication` skill to extract decisions/action items and file
+  them into the right place under `context/`.
+- Both skills append an entry to `context/main-log.md` if it exists (an experimental chronological
+  activity log — see that file's own header for what it's for).
 - **Decisions get a date and an owner** wherever they're logged: `**Redefined 2026-07-14 (per
   Dewi)**`, not just "we changed this." Undated, unattributed decisions are unverifiable later.
 

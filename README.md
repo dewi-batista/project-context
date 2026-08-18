@@ -22,6 +22,10 @@ Two failure modes this solves:
 ```
 context/
 ├── main-summary.md           # the living project summary — Claude-maintained, not hand-written
+├── main-log.md               # experimental: chronological activity log, one entry per logged
+│                             # event, appended to automatically by the summarise-* skills — see
+│                             # the file's own header. Included in the template for now; drop it
+│                             # per-project (or from the template entirely) if it doesn't pay off.
 ├── meetings/
 │   ├── <name>.md             # reconciled, decision-focused summaries, directly in meetings/
 │   │                         # (see "summarise-meeting" below) — the trustworthy version, and
@@ -36,7 +40,7 @@ context/
 │   └── scratch/               # the untouched original of every email/DM/offline recap above, in
 │       ├── emails/            # its original format, one-to-one by name. Claude never reads this
 │       ├── direct-messages/   # back — it's a write-only archive kept purely for a human's future
-│       └── offline/           # reference, not a working source (see add-project-context skill).
+│       └── offline/           # reference, not a working source (see summarise-communication skill).
 ├── misc/                     # non-context knowledge that isn't project decisions/comms —
 │                             # domain primers, running lessons-learned, per-project Claude
 │                             # operational notes. See project-skeleton.md §3 for the access
@@ -84,7 +88,7 @@ See `context/main-summary.md` for a filled-in skeleton with prompts for each sec
 Three intake paths — two backed by skills, one manual:
 
 1. **A meeting with a transcript** → the `summarise-meeting` skill. Cross-checks the fast Gemini auto-summary against the full raw transcript, catches places where the paraphrase doesn't match what was actually said, writes a reconciled decision-focused summary directly to `meetings/<name>.md`.
-2. **A chat log, an email thread, or a spoken conversation with no transcript at all** → the `add-project-context` skill. First classifies which of the three it's looking at, saves the untouched original to `communication/scratch/`, then reformats/archives a cleaned-up (verbatim, not summarized) copy to the matching `communication/` subfolder — the skill itself carries the per-type formatting rules, so there's no separate style guide to consult. Then extracts decisions, action items, and open questions and saves those into whichever of the structures above already fits (or into `main-summary.md` directly for something that belongs at the top level, like a scope change).
+2. **A chat log, an email thread, or a spoken conversation with no transcript at all** → the `summarise-communication` skill. First classifies which of the three it's looking at, saves the untouched original to `communication/scratch/`, then reformats/archives a cleaned-up (verbatim, not summarized) copy to the matching `communication/` subfolder — the skill itself carries the per-type formatting rules, so there's no separate style guide to consult. Then extracts decisions, action items, and open questions and saves those into whichever of the structures above already fits (or into `main-summary.md` directly for something that belongs at the top level, like a scope change).
 3. **Manual notes** — written by hand into `todo-project.md` while working day-to-day, or into a `notes/` directory (created when there's an actual need — see "The structure" above) for something that deserves its own topic file. Not skill-mediated, just following the same conventions so it stays discoverable later instead of living only in a scratch file that gets deleted.
 
 ## Conventions
@@ -92,7 +96,7 @@ Three intake paths — two backed by skills, one manual:
 - **`[[wikilink]]` cross-references.** `main-summary.md` links out to topic notes by filename stem (e.g. "see `[[notes-gqv]]`"), Obsidian-style — keeps notes individually readable but connected without duplicating content into `main-summary.md` itself.
 - **Date-stamp and attribute every logged decision.** `**Redefined 2026-07-14 (per Dewi)**`, not just "we changed this." A decision without a date and an owner is unverifiable later, and worse, un-overridable — nobody can tell if it's still current.
 - **Meeting filenames: `YYYYMMDD-attendee[-attendee2].md`.** Matched exactly across `meetings/scratch/transcripts/`, `meetings/scratch/gemini-summaries/`, and the reconciled `meetings/<name>.md`, so the three can be cross-referenced by name alone and a missing pairing is obvious at a glance. `communication/{emails,direct-messages,offline}/` and their `communication/scratch/` originals follow the same convention.
-- **Reformat communication, don't paraphrase it.** Light cleanup only per source type — strip email signature blocks/quote-nesting, strip chat read-receipts/reaction noise, lightly clean up an offline recap — but preserve exact numbers, dates, and commitments verbatim. Handled by the `add-project-context` skill, which carries the per-type rules directly rather than a separate style guide.
+- **Reformat communication, don't paraphrase it.** Light cleanup only per source type — strip email signature blocks/quote-nesting, strip chat read-receipts/reaction noise, lightly clean up an offline recap — but preserve exact numbers, dates, and commitments verbatim. Handled by the `summarise-communication` skill, which carries the per-type rules directly rather than a separate style guide.
 - **`communication/scratch/` is write-only.** It holds each source's untouched original, kept purely for a human's future reference in its original format — Claude never reads it back, full stop (unlike `meetings/scratch/`, which is a legitimate fallback when no reconciled summary exists yet; see `repo-project/AGENTS.md`).
 - **Never commit raw client data or secrets.** A scratch/raw-data dump directory (e.g. `context/misc/`) stays gitignored. Treat the whole repo as if it could go public, even when it's private.
 
@@ -114,5 +118,6 @@ Then start logging as the project moves — don't wait until there's "enough" to
 
 ## Related skills
 
-- [`add-project-context`](~/.claude/skills/add-project-context/) — pasted chat, Gmail, or spoken-conversation recap → verbatim archive under `communication/` + structured context in the decision log
+- [`get-context`](~/.claude/skills/get-context/) — reads through `context/` in the right order and reports back a concise orientation; the single source of truth for that reading order, which `AGENTS.md` files point to rather than restate
+- [`summarise-communication`](~/.claude/skills/summarise-communication/) — pasted chat, Gmail, or spoken-conversation recap → verbatim archive under `communication/` + structured context in the decision log
 - [`summarise-meeting`](~/.claude/skills/summarise-meeting/) — transcript + AI summary → reconciled decision-focused summary
