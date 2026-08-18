@@ -2,7 +2,7 @@
 
 Instructions for Claude (and the human) on when and how to commit in this repo. This directory
 (named `repo-project/` in the template, renamed to `repo-<slug>/` at kickoff — see
-`../context/misc/project-skeleton.md` §2) is the only git-tracked directory in this project —
+`context/misc/project-skeleton.md` §2) is the only git-tracked directory in this project —
 `context/` (including `context/misc/`) sits outside its history entirely.
 
 ---
@@ -24,11 +24,12 @@ Do NOT commit after minor typo fixes or cosmetic edits unless bundled with somet
 ## What to stage
 
 ```bash
-git add scripts/ config/ AGENTS.md README.md pyproject.toml
+git add scripts/ config/ AGENTS.md README.md commit-guide.md
 ```
 
-`data/` and `outputs/` are gitignored and regenerable from a fresh clone via the scripts alone —
-never force-add into them.
+As the project grows (`pyproject.toml`/`uv.lock`, `data/`, `outputs/`, etc.), stage those too — but
+`data/` and `outputs/` specifically should be gitignored and regenerable from a fresh clone via the
+scripts alone, never force-added.
 
 Check before committing:
 

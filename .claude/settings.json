@@ -7,6 +7,8 @@
     ],
     "deny": [
       "Read(context/misc/secrets/**)",
+      "Edit(context/misc/primers/**)",
+      "Edit(context/misc/lessons-learned.md)",
       "Edit(context/documents/**)",
       "Bash(rm -rf *)"
     ],

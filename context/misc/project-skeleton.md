@@ -164,5 +164,8 @@ password manager or `.env` file outside the tracked/visible tree, referenced by 
 
 - Hook up to Gmail/GDrive/Slack by default for a new project, rather than per-project setup each
   time?
-- A Claude skill that periodically sweeps `context/` and `repo-project/` to flag documentation that looks
-  stale given more recent notes/decisions — a freshness check, not just a search.
+- A periodic sweep of `context/` and `repo-project/` to flag documentation that looks stale given
+  more recent notes/decisions — partially covered now: the `get-context` skill flags it if
+  `main-summary.md` looks stale relative to what it just read, but that's a side effect of getting
+  oriented, not a dedicated sweep. A standalone skill for this (triggered on demand, not just as
+  part of orientation) is still unbuilt.
