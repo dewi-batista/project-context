@@ -102,6 +102,14 @@ Three intake paths — two backed by skills, one manual:
 
 ## Setting up a new project
 
+Open a Claude Code session in the new (ideally empty) project directory and run
+`/make-new-project` — no path or slug to type, the current directory and its name are both used
+directly. It copies the template, renames the placeholders, fixes cross-references, git-inits the
+repo, and walks through `project-skeleton.md`'s kickoff checklist with you (filling in
+`main-summary.md` and `AGENTS.md`'s placeholders). See that skill for the exact steps.
+
+Doing it by hand instead (what the skill automates):
+
 ```sh
 cp -r ~/Documents/project-context/context <path-to-new-project>/context
 cp -r ~/Documents/project-context/repo-project <path-to-new-project>/repo-project
@@ -119,5 +127,6 @@ Then start logging as the project moves — don't wait until there's "enough" to
 ## Related skills
 
 - [`get-context`](~/.claude/skills/get-context/) — reads through `context/` in the right order and reports back a concise orientation; the single source of truth for that reading order, which `AGENTS.md` files point to rather than restate
+- [`make-new-project`](~/.claude/skills/make-new-project/) — scaffolds a new project from this template in the current directory: copies, renames the placeholders to match the directory's name, git-inits the repo, and walks through `project-skeleton.md`'s kickoff checklist
 - [`summarise-communication`](~/.claude/skills/summarise-communication/) — pasted chat, Gmail, or spoken-conversation recap → verbatim archive under `communication/` + structured context in the decision log
 - [`summarise-meeting`](~/.claude/skills/summarise-meeting/) — transcript + AI summary → reconciled decision-focused summary
