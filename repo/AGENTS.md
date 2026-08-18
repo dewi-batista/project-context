@@ -21,7 +21,8 @@ the project, or at the start of a new session where project history matters, rea
    are the fact-checked record; reading Gemini's raw summary instead means re-trusting something
    already known to contain paraphrase errors, and reading raw transcripts means redoing work
    that's already been done.
-3. `context/notes/` — per-topic deep dives (methodology, open questions, assumptions). On a
+3. `context/notes/`, if it exists — per-topic deep dives (methodology, open questions,
+   assumptions). Not scaffolded by default; created per-project once there's an actual need. On a
    data-heavy project these live in `context/notes/data/` and mirror `repo/scripts/preprocessing/`
    one-to-one by source name.
 4. Only fall back to a meeting's raw transcript/gemini-summary in `meetings/scratch/` if no

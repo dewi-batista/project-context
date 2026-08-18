@@ -1,7 +1,9 @@
 # Next meeting
 
-Prep notes and agenda for the next scheduled meeting — updated before each call, cleared out after
-(fold anything worth keeping into `main-summary.md` or a `notes/` file first, don't just delete it).
+Day-to-day working notes — this is where you track things as you go: what's coming up, prep for
+the next call, anything on your mind mid-project. Not a formal record; that's what `main-summary.md`
+and `meetings/` are for. Fold anything worth keeping long-term into one of those before it gets
+cleared here, don't just let it vanish.
 
 **Date:** ...
 **Attendees:** ...
@@ -13,3 +15,9 @@ Prep notes and agenda for the next scheduled meeting — updated before each cal
 ## Open questions to raise
 
 - ...
+
+---
+
+## Todo
+
+- [ ] ...

@@ -19,7 +19,7 @@ Two failure modes this solves:
 
 ```
 context/
-├── main-summary.md           # the living project summary — single source of truth
+├── main-summary.md           # the living project summary — Claude-maintained, not hand-written
 ├── meetings/
 │   ├── <name>.md             # reconciled, decision-focused summaries, directly in meetings/
 │   │                         # (see "summarise-meeting" below) — the trustworthy version, and
@@ -31,33 +31,33 @@ context/
 │   ├── emails/               # reformatted email threads
 │   ├── direct-messages/      # reformatted chat/DM pastes
 │   └── offline/              # cleaned-up recaps of in-person/phone/unrecorded conversations
-├── planning/                 # checklists, plan docs, one-off scripts (e.g. deck builders)
-├── notes/                    # freeform topic notes — notes-<subject>.md, one per subject.
-│                              # On a data-heavy project, split into notes/data/ to mirror
-│                              # repo/scripts/preprocessing/ one deep-dive note per source
-│                              # (methodology, open questions, assumptions). More generally,
-│                              # split into per-workstream folders (e.g. modelling/) — same
-│                              # notes-<subject>.md convention either way.
 ├── misc/                     # non-context knowledge that isn't project decisions/comms —
-│                              # domain primers, running lessons-learned, per-project Claude
-│                              # operational notes. See project-skeleton.md §3 for the access
-│                              # table (parts of misc/ are read-only, secrets are denied outright).
-├── slides/                   # decks, reference materials, pptx exports — finished deliverables,
-│                              # normally read-only or denied to Claude (see project-skeleton.md §3)
-├── todo.md                   # running task list
-└── next-meeting.md           # prep notes/agenda for the next scheduled meeting
+│                             # domain primers, running lessons-learned, per-project Claude
+│                             # operational notes. See project-skeleton.md §3 for the access
+│                             # table (parts of misc/ are read-only, secrets are denied outright).
+├── documents/
+│   └── slides/               # decks, reference materials, pptx exports — finished deliverables,
+│                             # normally read-only or denied to Claude (see project-skeleton.md §3)
+└── next-meeting.md           # day-to-day working notes — agenda/prep for the next call, plus a
+                              # running todo list at the bottom. This is the file you actually
+                              # write into day-to-day; main-summary.md is Claude-maintained.
 ```
 
+Deliberately minimal to start: `notes/` (freeform topic notes) and `planning/` (checklists, plan
+docs) aren't scaffolded by default — add them per-project once there's an actual need, rather than
+carrying empty structure from day one. Same `notes-<subject>.md` convention as before if/when you
+add `notes/`; split into a subfolder per workstream (e.g. `notes/data/`, mirroring
+`repo/scripts/preprocessing/` on a data-heavy project) if it grows past a handful of files.
+
 `context/` is the whole non-code side of the project — everything that isn't `repo/` lives here,
-including `misc/`, `slides/`, and the two lightweight project-management files above. See
-[`project-skeleton.md`](project-skeleton.md) §1 for why the project root ends up being just
-`context/`, `repo/`, and `.claude/`.
+including `misc/`, `documents/`, and `next-meeting.md`. See [`project-skeleton.md`](project-skeleton.md)
+§1 for why the project root ends up being just `context/`, `repo/`, and `.claude/`.
 
 This repo's `context/` is exactly this skeleton, empty and ready to copy into a new project.
 
 ## `main-summary.md` — the entry point
 
-The one file a future reader (human or Claude) should read first to get oriented. It's a *living* document — updated as the project progresses, not written once at kickoff and left stale. Structure that's worked well:
+The one file a future reader (human or Claude) should read first to get oriented. It's a *living* document — updated as the project progresses, not written once at kickoff and left stale — but Claude-maintained, not something you write into by hand day-to-day (that's `next-meeting.md`'s job). Structure that's worked well:
 
 - **What we're building** — scope, deliverables, what's explicitly out of scope
 - **The client / team** — who's who, org, role
@@ -75,7 +75,7 @@ Three intake paths — two backed by skills, one manual:
 
 1. **A meeting with a transcript** → the `summarise-meeting` skill. Cross-checks the fast Gemini auto-summary against the full raw transcript, catches places where the paraphrase doesn't match what was actually said, writes a reconciled decision-focused summary directly to `meetings/<name>.md`.
 2. **A chat log, an email thread, or a spoken conversation with no transcript at all** → the `add-project-context` skill. First classifies which of the three it's looking at and reformats/archives it (verbatim, cleaned up) to the matching `communication/` subfolder — the skill itself carries the per-type formatting rules, so there's no separate style guide to consult. Then extracts decisions, action items, and open questions and saves those into whichever of the structures above already fits (or into `main-summary.md` directly for something that belongs at the top level, like a scope change).
-3. **Manual notes** — written by hand into `notes/` (or a workstream subfolder) while working something out. Not skill-mediated, just following the same structure so it stays discoverable later instead of living only in a scratch file that gets deleted.
+3. **Manual notes** — written by hand into `next-meeting.md` while working day-to-day, or into a `notes/` directory (created when there's an actual need — see "The structure" above) for something that deserves its own topic file. Not skill-mediated, just following the same conventions so it stays discoverable later instead of living only in a scratch file that gets deleted.
 
 ## Conventions
 

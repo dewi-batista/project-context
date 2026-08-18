@@ -18,9 +18,10 @@ point to tweak per project, not a final answer.
       lessons-learned.md        running list, updated as you go — not just at project close
       claude-setup.md           per-project Claude operational notes: credentials refs,
                                sheet IDs, auth method — never the credentials themselves
-    slides/                    decks, reference materials, pptx exports
-    todo.md                    running task list
-    next-meeting.md            prep notes/agenda for the next scheduled meeting
+    documents/
+      slides/                  decks, reference materials, pptx exports
+    next-meeting.md            day-to-day working notes: agenda/prep for the next call, plus a
+                               running todo list at the bottom — the file you actually write into
   repo/                         the ONLY git-tracked directory — see §2 (includes commit-guide.md,
                                since it's the only directory commits actually apply to)
   .claude/
@@ -96,7 +97,7 @@ in a `settings.json`, with per-tool, glob-scoped rules. Template at `.claude/set
 | `context/misc/primers/`, `context/misc/lessons-learned.md` | read-only | reference material, shouldn't get silently rewritten |
 | `context/misc/claude-setup.md` | read-write | Claude updates this as new access/credentials get granted |
 | any secrets/credentials file | **deny (no access)** | see caveat below — don't rely on this alone |
-| `context/slides/` | read-only, or deny | finished deliverables; rarely something Claude should edit |
+| `context/documents/` | read-only, or deny | finished deliverables (slides, decks); rarely something Claude should edit |
 
 **Caveats worth knowing (confirmed against current Claude Code docs), not just assumed:**
 
