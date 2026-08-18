@@ -38,7 +38,7 @@ context/
                                # notes-<subject>.md convention either way.
 ```
 
-This repo's `template/context/` is exactly this skeleton, empty and ready to copy into a new project.
+This repo's `context/` is exactly this skeleton, empty and ready to copy into a new project.
 
 ## `summaries/main.md` — the entry point
 
@@ -52,7 +52,7 @@ The one file a future reader (human or Claude) should read first to get oriented
 - **Quirks & things to know** — the "gotchas" that aren't obvious from the code/data itself (a filter bug that silently did nothing, a currency conversion that isn't what it looks like, etc.)
 - **Key decisions logged** — a table: decision · detail · date · who decided it
 
-See `template/context/summaries/main.md` for a filled-in skeleton with prompts for each section.
+See `context/summaries/main.md` for a filled-in skeleton with prompts for each section.
 
 ## How context gets in
 
@@ -67,16 +67,16 @@ Three intake paths — two backed by skills, one manual:
 - **`[[wikilink]]` cross-references.** `main.md` links out to topic notes by filename stem (e.g. "see `[[notes-gqv]]`"), Obsidian-style — keeps notes individually readable but connected without duplicating content into `main.md` itself.
 - **Date-stamp and attribute every logged decision.** `**Redefined 2026-07-14 (per Dewi)**`, not just "we changed this." A decision without a date and an owner is unverifiable later, and worse, un-overridable — nobody can tell if it's still current.
 - **Meeting filenames: `YYYYMMDD-attendee[-attendee2].md`.** Matched exactly across `transcripts/`, `gemini-summaries/`, and `claude-summaries/`, so the three can be cross-referenced by name alone and a missing pairing is obvious at a glance.
-- **Reformat emails, don't paraphrase them.** Light cleanup only — strip signature blocks and quote-nesting, reorder chronologically (oldest first) — but preserve exact numbers, dates, and commitments verbatim. See `template/context/communication/email-formatting-guide.md`.
+- **Reformat emails, don't paraphrase them.** Light cleanup only — strip signature blocks and quote-nesting, reorder chronologically (oldest first) — but preserve exact numbers, dates, and commitments verbatim. See `context/communication/email-formatting-guide.md`.
 - **Never commit raw client data or secrets.** A scratch/raw-data dump directory (e.g. `misc/`) stays gitignored. Treat the whole repo as if it could go public, even when it's private.
 
 ## Setting up a new project
 
 ```sh
-cp -r ~/Documents/project-context/template/context <path-to-new-project>/context
-cp -r ~/Documents/project-context/template/repo <path-to-new-project>/repo
-cp -r ~/Documents/project-context/template/.claude <path-to-new-project>/.claude
-cp -r ~/Documents/project-context/template/misc <path-to-new-project>/misc
+cp -r ~/Documents/project-context/context <path-to-new-project>/context
+cp -r ~/Documents/project-context/repo <path-to-new-project>/repo
+cp -r ~/Documents/project-context/.claude <path-to-new-project>/.claude
+cp -r ~/Documents/project-context/misc <path-to-new-project>/misc
 ```
 
 Then fill in `context/summaries/main.md`'s placeholders and `repo/AGENTS.md`'s project-specific

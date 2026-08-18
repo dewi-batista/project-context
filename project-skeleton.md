@@ -48,7 +48,7 @@ domain:
 repo/
   AGENTS.md                   single source of truth for a coding agent: what the project is,
                                pipeline order, repo layout, and the conventions every script
-                               follows. Template at template/repo/AGENTS.md — includes the
+                               follows. Template at repo/AGENTS.md — includes the
                                context-system workflow (summarise-meeting after every meeting,
                                add-project-context for everything else, read
                                context/summaries/main.md + claude-summaries/ for orientation)
@@ -74,14 +74,14 @@ repo/
 ```
 
 Conventions worth carrying forward regardless of project type (all validated on ES) are listed in
-`template/repo/AGENTS.md`.
+`repo/AGENTS.md`.
 
 ---
 
 ## 3. Claude Code directory access control
 
 Claude Code supports this natively via `permissions.allow` / `permissions.deny` / `permissions.ask`
-in a `settings.json`, with per-tool, glob-scoped rules. Template at `template/.claude/settings.json`.
+in a `settings.json`, with per-tool, glob-scoped rules. Template at `.claude/settings.json`.
 
 **Proposed default access table** (starting point — tweak per project):
 
