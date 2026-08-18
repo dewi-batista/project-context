@@ -13,14 +13,14 @@ point to tweak per project, not a final answer.
 <project-name>/
   context/                    See README.md. Obsidian-only, never git-tracked (or tracked in its
                                own separate, unpublished history) — not part of repo/'s git repo.
-  misc/
-    primers/                   domain refreshers (stats/ML concepts, methodology explainers)
-    lessons-learned.md          running list, updated as you go — not just at project close
-    commit-guide.md
-    claude-setup.md             per-project Claude operational notes: credentials refs,
+    misc/
+      primers/                 domain refreshers (stats/ML concepts, methodology explainers)
+      lessons-learned.md        running list, updated as you go — not just at project close
+      claude-setup.md           per-project Claude operational notes: credentials refs,
                                sheet IDs, auth method — never the credentials themselves
   slides/                       decks, reference materials, pptx exports
-  repo/                         the ONLY git-tracked directory — see §2
+  repo/                         the ONLY git-tracked directory — see §2 (includes commit-guide.md,
+                               since it's the only directory commits actually apply to)
   todo.md
   next-meeting.md
   .claude/
@@ -51,7 +51,7 @@ repo/
                                follows. Template at repo/AGENTS.md — includes the
                                context-system workflow (summarise-meeting after every meeting,
                                add-project-context for everything else, read
-                               context/summaries/main.md + meetings/ for orientation)
+                               context/main-summary.md + meetings/ for orientation)
                                plus placeholders for the project-specific sections.
   README.md                    one-page human-facing scope summary
   config/
@@ -90,8 +90,8 @@ in a `settings.json`, with per-tool, glob-scoped rules. Template at `.claude/set
 | `repo/scripts/`, `repo/config/` | read-write | primary code Claude edits |
 | `repo/data/`, `repo/outputs/` | read-write | pipeline needs full read/write; already gitignored |
 | `context/**` | read-write | Claude actively builds/maintains meeting summaries + decision log |
-| `misc/primers/`, `misc/lessons-learned.md` | read-only | reference material, shouldn't get silently rewritten |
-| `misc/claude-setup.md` | read-write | Claude updates this as new access/credentials get granted |
+| `context/misc/primers/`, `context/misc/lessons-learned.md` | read-only | reference material, shouldn't get silently rewritten |
+| `context/misc/claude-setup.md` | read-write | Claude updates this as new access/credentials get granted |
 | any secrets/credentials file | **deny (no access)** | see caveat below — don't rely on this alone |
 | `slides/` | read-only, or deny | finished deliverables; rarely something Claude should edit |
 
@@ -118,7 +118,8 @@ in a `settings.json`, with per-tool, glob-scoped rules. Template at `.claude/set
   `~/.claude/settings.json`.
 
 **Biggest practical takeaway from this project: don't rely on Claude-side access rules as your only
-safeguard for secrets.** The one real miss on ES was `misc/password.md` — a plaintext credentials
+safeguard for secrets.** The one real miss on ES was `misc/password.md` (pre-dates the current
+`context/misc/` nesting, but the same risk applies wherever it lives) — a plaintext credentials
 file sitting inside the same vault Claude has broad read access to. A `deny` rule fixes Claude
 specifically, but the simplest actual fix is: **don't put secrets in the vault at all** — use a
 password manager or `.env` file outside the tracked/visible tree, referenced by name only (as

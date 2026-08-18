@@ -5,7 +5,8 @@ A personal pattern for keeping durable, reusable project context — decisions, 
 This pattern grew organically on the Epidemic Sound MMM engagement (`~/Documents/cromen-wyllt/work/epidemic-sound/context/`). This repo extracts it into a standalone template + writeup so it's reusable on future projects, rather than something re-derived from scratch each time.
 
 `context/` is one piece of a project — see [`project-skeleton.md`](project-skeleton.md) for how it
-sits alongside `repo/`, `misc/`, and Claude Code's directory access rules.
+sits alongside `repo/` and Claude Code's directory access rules. (`misc/` lives inside `context/`
+— see the structure below.)
 
 ## Why
 
@@ -18,8 +19,7 @@ Two failure modes this solves:
 
 ```
 context/
-├── summaries/
-│   └── main.md              # the living project summary — single source of truth
+├── main-summary.md           # the living project summary — single source of truth
 ├── meetings/
 │   ├── <name>.md             # reconciled, decision-focused summaries, directly in meetings/
 │   │                         # (see "summarise-meeting" below) — the trustworthy version, and
@@ -32,17 +32,21 @@ context/
 │   ├── direct-messages/      # reformatted chat/DM pastes
 │   └── offline/              # cleaned-up recaps of in-person/phone/unrecorded conversations
 ├── planning/                 # checklists, plan docs, one-off scripts (e.g. deck builders)
-└── notes/                    # freeform topic notes — notes-<subject>.md, one per subject.
-                               # On a data-heavy project, split into notes/data/ to mirror
-                               # repo/scripts/preprocessing/ one deep-dive note per source
-                               # (methodology, open questions, assumptions). More generally,
-                               # split into per-workstream folders (e.g. modelling/) — same
-                               # notes-<subject>.md convention either way.
+├── notes/                    # freeform topic notes — notes-<subject>.md, one per subject.
+│                              # On a data-heavy project, split into notes/data/ to mirror
+│                              # repo/scripts/preprocessing/ one deep-dive note per source
+│                              # (methodology, open questions, assumptions). More generally,
+│                              # split into per-workstream folders (e.g. modelling/) — same
+│                              # notes-<subject>.md convention either way.
+└── misc/                     # non-context knowledge that isn't project decisions/comms —
+                               # domain primers, running lessons-learned, per-project Claude
+                               # operational notes. See project-skeleton.md §3 for the access
+                               # table (parts of misc/ are read-only, secrets are denied outright).
 ```
 
 This repo's `context/` is exactly this skeleton, empty and ready to copy into a new project.
 
-## `summaries/main.md` — the entry point
+## `main-summary.md` — the entry point
 
 The one file a future reader (human or Claude) should read first to get oriented. It's a *living* document — updated as the project progresses, not written once at kickoff and left stale. Structure that's worked well:
 
@@ -54,23 +58,23 @@ The one file a future reader (human or Claude) should read first to get oriented
 - **Quirks & things to know** — the "gotchas" that aren't obvious from the code/data itself (a filter bug that silently did nothing, a currency conversion that isn't what it looks like, etc.)
 - **Key decisions logged** — a table: decision · detail · date · who decided it
 
-See `context/summaries/main.md` for a filled-in skeleton with prompts for each section.
+See `context/main-summary.md` for a filled-in skeleton with prompts for each section.
 
 ## How context gets in
 
 Three intake paths — two backed by skills, one manual:
 
 1. **A meeting with a transcript** → the `summarise-meeting` skill. Cross-checks the fast Gemini auto-summary against the full raw transcript, catches places where the paraphrase doesn't match what was actually said, writes a reconciled decision-focused summary directly to `meetings/<name>.md`.
-2. **A chat log, an email thread, or a spoken conversation with no transcript at all** → the `add-project-context` skill. First classifies which of the three it's looking at and reformats/archives it (verbatim, cleaned up) to the matching `communication/` subfolder — the skill itself carries the per-type formatting rules, so there's no separate style guide to consult. Then extracts decisions, action items, and open questions and saves those into whichever of the structures above already fits (or into `summaries/main.md` directly for something that belongs at the top level, like a scope change).
+2. **A chat log, an email thread, or a spoken conversation with no transcript at all** → the `add-project-context` skill. First classifies which of the three it's looking at and reformats/archives it (verbatim, cleaned up) to the matching `communication/` subfolder — the skill itself carries the per-type formatting rules, so there's no separate style guide to consult. Then extracts decisions, action items, and open questions and saves those into whichever of the structures above already fits (or into `main-summary.md` directly for something that belongs at the top level, like a scope change).
 3. **Manual notes** — written by hand into `notes/` (or a workstream subfolder) while working something out. Not skill-mediated, just following the same structure so it stays discoverable later instead of living only in a scratch file that gets deleted.
 
 ## Conventions
 
-- **`[[wikilink]]` cross-references.** `main.md` links out to topic notes by filename stem (e.g. "see `[[notes-gqv]]`"), Obsidian-style — keeps notes individually readable but connected without duplicating content into `main.md` itself.
+- **`[[wikilink]]` cross-references.** `main-summary.md` links out to topic notes by filename stem (e.g. "see `[[notes-gqv]]`"), Obsidian-style — keeps notes individually readable but connected without duplicating content into `main-summary.md` itself.
 - **Date-stamp and attribute every logged decision.** `**Redefined 2026-07-14 (per Dewi)**`, not just "we changed this." A decision without a date and an owner is unverifiable later, and worse, un-overridable — nobody can tell if it's still current.
 - **Meeting filenames: `YYYYMMDD-attendee[-attendee2].md`.** Matched exactly across `meetings/scratch/transcripts/`, `meetings/scratch/gemini-summaries/`, and the reconciled `meetings/<name>.md`, so the three can be cross-referenced by name alone and a missing pairing is obvious at a glance. `communication/{emails,direct-messages,offline}/` follow the same convention.
 - **Reformat communication, don't paraphrase it.** Light cleanup only per source type — strip email signature blocks/quote-nesting, strip chat read-receipts/reaction noise, lightly clean up an offline recap — but preserve exact numbers, dates, and commitments verbatim. Handled by the `add-project-context` skill, which carries the per-type rules directly rather than a separate style guide.
-- **Never commit raw client data or secrets.** A scratch/raw-data dump directory (e.g. `misc/`) stays gitignored. Treat the whole repo as if it could go public, even when it's private.
+- **Never commit raw client data or secrets.** A scratch/raw-data dump directory (e.g. `context/misc/`) stays gitignored. Treat the whole repo as if it could go public, even when it's private.
 
 ## Setting up a new project
 
@@ -78,13 +82,12 @@ Three intake paths — two backed by skills, one manual:
 cp -r ~/Documents/project-context/context <path-to-new-project>/context
 cp -r ~/Documents/project-context/repo <path-to-new-project>/repo
 cp -r ~/Documents/project-context/.claude <path-to-new-project>/.claude
-cp -r ~/Documents/project-context/misc <path-to-new-project>/misc
 ```
 
-Then fill in `context/summaries/main.md`'s placeholders and `repo/AGENTS.md`'s project-specific
+Then fill in `context/main-summary.md`'s placeholders and `repo/AGENTS.md`'s project-specific
 sections, and start logging as the project moves — don't wait until there's "enough" to write down.
-See [`project-skeleton.md`](project-skeleton.md) for what `repo/`, `misc/`, and `.claude/settings.json`
-are for.
+See [`project-skeleton.md`](project-skeleton.md) for what `repo/`, `context/misc/`, and
+`.claude/settings.json` are for.
 
 ## Related skills
 

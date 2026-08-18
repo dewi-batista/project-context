@@ -6,7 +6,7 @@
       "Bash(uv run *)", "Bash(git *)"
     ],
     "deny": [
-      "Read(misc/secrets/**)",
+      "Read(context/misc/secrets/**)",
       "Edit(slides/**)",
       "Bash(rm -rf *)"
     ],

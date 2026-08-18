@@ -13,7 +13,7 @@ as-is.
 see `~/Documents/project-context/README.md` for the full pattern. When asked to "get context" on
 the project, or at the start of a new session where project history matters, read in this order:
 
-1. `context/summaries/main.md` — the living project summary: scope, team, timeline, data
+1. `context/main-summary.md` — the living project summary: scope, team, timeline, data
    inventory, quirks, and a running "Key Decisions" table of what's confirmed vs. still open. The
    single fastest way to get a new session oriented.
 2. `context/meetings/<name>.md` — **not** `meetings/scratch/gemini-summaries/` or
