@@ -14,11 +14,3 @@
 
 **Meeting notes**
 - [ ] 
-
----
-
-**Post-SteerCo**
-- [ ] 
-
-**Self**
-- [ ] 
