@@ -2,10 +2,11 @@
 
 **Read and work through this at project kickoff, before creating anything else.** This is the
 checklist for laying out a new project: copy the template (see `README.md`'s "Setting up a new
-project"), then use §1–§3 below to make the per-project calls — rename `repo-project/`, review the
-access table, confirm `context/misc/`'s files are actually filled in. This file lives at
-`context/misc/project-skeleton.md` once copied, so it travels with the project as a record of what
-was decided at setup, not just a one-time reference you consult and forget.
+project"), then use §1–§3 below to make the per-project calls — rename `repo-project/` and
+`todo-project.md` to match the project slug, review the access table, confirm `context/misc/`'s
+files are actually filled in. This file lives at `context/misc/project-skeleton.md` once copied, so
+it travels with the project as a record of what was decided at setup, not just a one-time reference
+you consult and forget.
 
 `context/` (see `README.md`) is one piece of a larger per-project layout. This doc covers the
 rest: where `repo-project/` sits, Claude Code's directory access rules, and lessons that don't belong in
@@ -28,10 +29,11 @@ point to tweak per project, not a final answer.
       project-skeleton.md       this file, once copied — the setup checklist for this project
     documents/
       slides/                  decks, reference materials, pptx exports
-  next-meeting.md              day-to-day working notes: agenda/prep for the next call, plus a
-                               running todo list at the bottom — the file you actually write into.
-                               The one non-code file that lives at project root, not under context/,
-                               since it's the thing you touch most often.
+  todo-project.md              RENAME to todo-<slug> at kickoff (e.g. todo-es), same as
+                               repo-project/ below. Day-to-day working notes: agenda/prep for the
+                               next call, plus a running todo list — the file you actually write
+                               into. The one non-code file that lives at project root, not under
+                               context/, since it's the thing you touch most often.
   repo-project/                RENAME to repo-<slug> at kickoff (e.g. repo-es) — the ONLY
                                git-tracked directory — see §2 (includes commit-guide.md, since
                                it's the only directory commits actually apply to). If you rename
@@ -41,9 +43,9 @@ point to tweak per project, not a final answer.
     settings.json              project-level permission rules — see §3
 ```
 
-Everything that isn't code lives under `context/`, with the single exception of `next-meeting.md` —
-the project root ends up being `context/`, `next-meeting.md`, `repo-<slug>/`, and `.claude/`
-(tooling config, not project knowledge).
+Everything that isn't code lives under `context/`, with the single exception of `todo-project.md`
+(renamed `todo-<slug>.md` at kickoff) — the project root ends up being `context/`, `todo-<slug>.md`,
+`repo-<slug>/`, and `.claude/` (tooling config, not project knowledge).
 
 **Why `context/` and `repo-project/` are strictly separate:** `context/` holds client-sensitive material
 (transcripts, internal decisions, sometimes PII-adjacent notes) that should never end up on a

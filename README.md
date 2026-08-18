@@ -42,10 +42,11 @@ context/
                                # normally read-only or denied to Claude (see project-skeleton.md §3)
 ```
 
-`next-meeting.md` — day-to-day working notes, agenda/prep for the next call, plus a running todo
-list at the bottom — is the one non-code file that lives at the *project root*, not under
-`context/`, since it's the file you actually write into most often. Everything else non-code is
-under `context/`; `main-summary.md` stays Claude-maintained, not a scratchpad.
+`todo-project.md` (renamed `todo-<slug>.md` at kickoff, same treatment as `repo-project/` below) —
+day-to-day working notes, agenda/prep for the next call, plus a running todo list at the bottom —
+is the one non-code file that lives at the *project root*, not under `context/`, since it's the
+file you actually write into most often. Everything else non-code is under `context/`;
+`main-summary.md` stays Claude-maintained, not a scratchpad.
 
 Deliberately minimal to start: `notes/` (freeform topic notes) and `planning/` (checklists, plan
 docs) aren't scaffolded by default — add them per-project once there's an actual need, rather than
@@ -54,15 +55,15 @@ add `notes/`; split into a subfolder per workstream (e.g. `notes/data/`, mirrori
 `repo-project/scripts/preprocessing/` on a data-heavy project) if it grows past a handful of files.
 
 `context/` is the whole non-code side of the project (`misc/`, `documents/`, meeting/communication
-records) except `next-meeting.md`, which sits at the project root alongside it. See
+records) except `todo-project.md`, which sits at the project root alongside it. See
 [`context/misc/project-skeleton.md`](context/misc/project-skeleton.md) §1 for why the project root
-ends up being just `context/`, `next-meeting.md`, `repo-<slug>/`, and `.claude/`.
+ends up being just `context/`, `todo-<slug>.md`, `repo-<slug>/`, and `.claude/`.
 
 This repo's `context/` is exactly this skeleton, empty and ready to copy into a new project.
 
 ## `main-summary.md` — the entry point
 
-The one file a future reader (human or Claude) should read first to get oriented. It's a *living* document — updated as the project progresses, not written once at kickoff and left stale — but Claude-maintained, not something you write into by hand day-to-day (that's `next-meeting.md`'s job). Structure that's worked well:
+The one file a future reader (human or Claude) should read first to get oriented. It's a *living* document — updated as the project progresses, not written once at kickoff and left stale — but Claude-maintained, not something you write into by hand day-to-day (that's `todo-project.md`'s job). Structure that's worked well:
 
 - **What we're building** — scope, deliverables, what's explicitly out of scope
 - **The client / team** — who's who, org, role
@@ -80,7 +81,7 @@ Three intake paths — two backed by skills, one manual:
 
 1. **A meeting with a transcript** → the `summarise-meeting` skill. Cross-checks the fast Gemini auto-summary against the full raw transcript, catches places where the paraphrase doesn't match what was actually said, writes a reconciled decision-focused summary directly to `meetings/<name>.md`.
 2. **A chat log, an email thread, or a spoken conversation with no transcript at all** → the `add-project-context` skill. First classifies which of the three it's looking at and reformats/archives it (verbatim, cleaned up) to the matching `communication/` subfolder — the skill itself carries the per-type formatting rules, so there's no separate style guide to consult. Then extracts decisions, action items, and open questions and saves those into whichever of the structures above already fits (or into `main-summary.md` directly for something that belongs at the top level, like a scope change).
-3. **Manual notes** — written by hand into `next-meeting.md` while working day-to-day, or into a `notes/` directory (created when there's an actual need — see "The structure" above) for something that deserves its own topic file. Not skill-mediated, just following the same conventions so it stays discoverable later instead of living only in a scratch file that gets deleted.
+3. **Manual notes** — written by hand into `todo-project.md` while working day-to-day, or into a `notes/` directory (created when there's an actual need — see "The structure" above) for something that deserves its own topic file. Not skill-mediated, just following the same conventions so it stays discoverable later instead of living only in a scratch file that gets deleted.
 
 ## Conventions
 
@@ -95,16 +96,16 @@ Three intake paths — two backed by skills, one manual:
 ```sh
 cp -r ~/Documents/project-context/context <path-to-new-project>/context
 cp -r ~/Documents/project-context/repo-project <path-to-new-project>/repo-project
-cp ~/Documents/project-context/next-meeting.md <path-to-new-project>/next-meeting.md
+cp ~/Documents/project-context/todo-project.md <path-to-new-project>/todo-project.md
 cp -r ~/Documents/project-context/.claude <path-to-new-project>/.claude
 ```
 
 **Then open `context/misc/project-skeleton.md` and work through it** — it's the setup checklist,
-not just background reading: rename `repo-project/` to `repo-<slug>/` (and update the references
-that name still needs fixing in that same file and in `.claude/settings.json`), review the access
-table, and fill in `context/main-summary.md`'s placeholders and `repo-<slug>/AGENTS.md`'s
-project-specific sections. Then start logging as the project moves — don't wait until there's
-"enough" to write down.
+not just background reading: rename `repo-project/` to `repo-<slug>/` and `todo-project.md` to
+`todo-<slug>.md` (and update the references that name still needs fixing in `project-skeleton.md`
+itself and in `.claude/settings.json`), review the access table, and fill in
+`context/main-summary.md`'s placeholders and `repo-<slug>/AGENTS.md`'s project-specific sections.
+Then start logging as the project moves — don't wait until there's "enough" to write down.
 
 ## Related skills
 

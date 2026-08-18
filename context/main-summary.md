@@ -2,7 +2,7 @@
 
 This document is a living summary of [project name]. It captures the project's goals, deliverables, data landscape, technical setup, key decisions, and notable quirks — updated as the project progresses. It is intended as a quick reference to get up to speed at any point in time.
 
-**This file is Claude-maintained, not hand-written.** It gets updated via the `summarise-meeting` and `add-project-context` skills as things get logged, plus direct edits when a decision needs correcting. For day-to-day working notes, use `next-meeting.md` instead — this file stays a clean, high-level summary, not a scratchpad.
+**This file is Claude-maintained, not hand-written.** It gets updated via the `summarise-meeting` and `add-project-context` skills as things get logged, plus direct edits when a decision needs correcting. For day-to-day working notes, use `todo-project.md` (renamed `todo-<slug>.md` at kickoff) instead — this file stays a clean, high-level summary, not a scratchpad.
 
 ---
 
