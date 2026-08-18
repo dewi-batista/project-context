@@ -66,9 +66,11 @@ Sound, for example — as one of the first things you do, not something to circl
 update every `repo-project/` reference in this file's §1/§3 and in `.claude/settings.json` to the
 new name.
 
-This is the part you'll tweak most per project type — `ingest/` → `preprocessing/` → `eda/` is
-MMM-specific. The scaffolding around it generalized well and is worth keeping regardless of
-domain:
+Deliberately minimal to start, same reasoning as `context/notes/` and `context/planning/` in
+README.md: `config/` and `scripts/` start flat and empty, no pre-scaffolded subdivision. The right
+shape (an `ingest/`/`preprocessing/`/`eda/` pipeline, a single flat set of scripts, whatever else)
+depends on the project and should get made on the fly as the work actually takes shape, not decided
+upfront from a template.
 
 ```
 repo-project/
@@ -79,27 +81,15 @@ repo-project/
                                add-project-context for everything else, read
                                context/main-summary.md + meetings/ for orientation)
                                plus placeholders for the project-specific sections.
+  commit-guide.md              when/how to commit — see the file itself
   README.md                    one-page human-facing scope summary
-  config/
-    settings.yaml               single source of truth for parameters — date range, filters,
-                               external table/API references, any taxonomy/grouping config.
-                               Scripts read this, not hardcoded constants.
-  scripts/
-    ingest/                    one script per raw source → data/raw/*.csv
-    preprocessing/              one script per source → data/pre-processed/*.csv
-    eda/ (or analysis/)         exploratory work → outputs/**
-    metadata.py                 shared write_metadata() sidecar helper — every output file gets
-                               a matching metadata/*.meta.json (generating script, source files,
-                               parameters, row count, a free-text "why")
-    plotting.py                 shared chart styling, if the project produces charts
-  data/                        gitignored: raw/, pre-processed/, scratch/
-  outputs/                     gitignored: fully regenerable from data/ + scripts/
-  pyproject.toml / uv.lock     dependency management
-  .python-version
-  .gitignore
+  config/                      empty to start
+  scripts/                     empty to start — subdivide, add data/, outputs/, etc. as the actual
+                               work takes shape, not upfront
 ```
 
-Conventions worth carrying forward regardless of project type (all validated on ES) are listed in
+Conventions worth carrying forward regardless of project type (validated on ES, but not
+prescriptive) are listed in
 `repo-project/AGENTS.md`.
 
 ---
@@ -113,8 +103,7 @@ in a `settings.json`, with per-tool, glob-scoped rules. Template at `.claude/set
 
 | Directory | Access | Why |
 |---|---|---|
-| `repo-project/scripts/`, `repo-project/config/` | read-write | primary code Claude edits |
-| `repo-project/data/`, `repo-project/outputs/` | read-write | pipeline needs full read/write; already gitignored |
+| `repo-project/**` | read-write | primary code (and any pipeline data/outputs it produces) Claude edits |
 | `context/**` | read-write | Claude actively builds/maintains meeting summaries + decision log |
 | `context/misc/primers/`, `context/misc/lessons-learned.md` | read-only | reference material, shouldn't get silently rewritten |
 | `context/misc/claude-setup.md` | read-write | Claude updates this as new access/credentials get granted |

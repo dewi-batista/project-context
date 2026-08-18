@@ -35,6 +35,13 @@ Don't reconstruct project history from raw transcripts when a reconciled `meetin
 already exists for that meeting — it's slower, and you'd be re-deriving something already
 verified.
 
+**Never read `context/communication/scratch/`.** Unlike `meetings/scratch/`, this isn't a
+fallback — it holds the untouched original of every email/DM/offline recap in
+`context/communication/{emails,direct-messages,offline}/`, written once by the
+`add-project-context` skill purely so the original format exists for a human's future reference.
+The cleaned-up versions in `communication/{emails,direct-messages,offline}/` are always the ones to
+read; there's no case where `scratch/` has information they don't.
+
 ## Logging new context
 
 - **After each meeting**, run the `summarise-meeting` skill (`/summarise-meeting`) to reconcile the
