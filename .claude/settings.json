@@ -1,7 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Read(repo/**)", "Edit(repo/**)", "Write(repo/**)",
+      "Read(repo-project/**)", "Edit(repo-project/**)", "Write(repo-project/**)",
       "Read(context/**)", "Edit(context/**)", "Write(context/**)",
       "Bash(uv run *)", "Bash(git *)"
     ],

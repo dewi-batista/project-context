@@ -4,9 +4,11 @@ A personal pattern for keeping durable, reusable project context — decisions, 
 
 This pattern grew organically on the Epidemic Sound MMM engagement (`~/Documents/cromen-wyllt/work/epidemic-sound/context/`). This repo extracts it into a standalone template + writeup so it's reusable on future projects, rather than something re-derived from scratch each time.
 
-`context/` is one piece of a project — see [`project-skeleton.md`](project-skeleton.md) for how it
-sits alongside `repo/` and Claude Code's directory access rules. (`misc/` lives inside `context/`
-— see the structure below.)
+`context/` is one piece of a project — see [`context/misc/project-skeleton.md`](context/misc/project-skeleton.md)
+for how it sits alongside `repo-project/` (renamed per-project — see below) and Claude Code's
+directory access rules. That file is the setup checklist: read and work through it at project
+kickoff, and fill in its per-project decisions (the repo rename, the access table) rather than just
+skimming it once. (`misc/` lives inside `context/` — see the structure below.)
 
 ## Why
 
@@ -35,23 +37,26 @@ context/
 │                             # domain primers, running lessons-learned, per-project Claude
 │                             # operational notes. See project-skeleton.md §3 for the access
 │                             # table (parts of misc/ are read-only, secrets are denied outright).
-├── documents/
-│   └── slides/               # decks, reference materials, pptx exports — finished deliverables,
-│                             # normally read-only or denied to Claude (see project-skeleton.md §3)
-└── next-meeting.md           # day-to-day working notes — agenda/prep for the next call, plus a
-                              # running todo list at the bottom. This is the file you actually
-                              # write into day-to-day; main-summary.md is Claude-maintained.
+└── documents/
+    └── slides/               # decks, reference materials, pptx exports — finished deliverables,
+                               # normally read-only or denied to Claude (see project-skeleton.md §3)
 ```
+
+`next-meeting.md` — day-to-day working notes, agenda/prep for the next call, plus a running todo
+list at the bottom — is the one non-code file that lives at the *project root*, not under
+`context/`, since it's the file you actually write into most often. Everything else non-code is
+under `context/`; `main-summary.md` stays Claude-maintained, not a scratchpad.
 
 Deliberately minimal to start: `notes/` (freeform topic notes) and `planning/` (checklists, plan
 docs) aren't scaffolded by default — add them per-project once there's an actual need, rather than
 carrying empty structure from day one. Same `notes-<subject>.md` convention as before if/when you
 add `notes/`; split into a subfolder per workstream (e.g. `notes/data/`, mirroring
-`repo/scripts/preprocessing/` on a data-heavy project) if it grows past a handful of files.
+`repo-project/scripts/preprocessing/` on a data-heavy project) if it grows past a handful of files.
 
-`context/` is the whole non-code side of the project — everything that isn't `repo/` lives here,
-including `misc/`, `documents/`, and `next-meeting.md`. See [`project-skeleton.md`](project-skeleton.md)
-§1 for why the project root ends up being just `context/`, `repo/`, and `.claude/`.
+`context/` is the whole non-code side of the project (`misc/`, `documents/`, meeting/communication
+records) except `next-meeting.md`, which sits at the project root alongside it. See
+[`context/misc/project-skeleton.md`](context/misc/project-skeleton.md) §1 for why the project root
+ends up being just `context/`, `next-meeting.md`, `repo-<slug>/`, and `.claude/`.
 
 This repo's `context/` is exactly this skeleton, empty and ready to copy into a new project.
 
@@ -89,14 +94,17 @@ Three intake paths — two backed by skills, one manual:
 
 ```sh
 cp -r ~/Documents/project-context/context <path-to-new-project>/context
-cp -r ~/Documents/project-context/repo <path-to-new-project>/repo
+cp -r ~/Documents/project-context/repo-project <path-to-new-project>/repo-project
+cp ~/Documents/project-context/next-meeting.md <path-to-new-project>/next-meeting.md
 cp -r ~/Documents/project-context/.claude <path-to-new-project>/.claude
 ```
 
-Then fill in `context/main-summary.md`'s placeholders and `repo/AGENTS.md`'s project-specific
-sections, and start logging as the project moves — don't wait until there's "enough" to write down.
-See [`project-skeleton.md`](project-skeleton.md) for what `repo/`, `context/misc/`, and
-`.claude/settings.json` are for.
+**Then open `context/misc/project-skeleton.md` and work through it** — it's the setup checklist,
+not just background reading: rename `repo-project/` to `repo-<slug>/` (and update the references
+that name still needs fixing in that same file and in `.claude/settings.json`), review the access
+table, and fill in `context/main-summary.md`'s placeholders and `repo-<slug>/AGENTS.md`'s
+project-specific sections. Then start logging as the project moves — don't wait until there's
+"enough" to write down.
 
 ## Related skills
 

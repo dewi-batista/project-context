@@ -1,7 +1,14 @@
 # Project skeleton
 
+**Read and work through this at project kickoff, before creating anything else.** This is the
+checklist for laying out a new project: copy the template (see `README.md`'s "Setting up a new
+project"), then use §1–§3 below to make the per-project calls — rename `repo-project/`, review the
+access table, confirm `context/misc/`'s files are actually filled in. This file lives at
+`context/misc/project-skeleton.md` once copied, so it travels with the project as a record of what
+was decided at setup, not just a one-time reference you consult and forget.
+
 `context/` (see `README.md`) is one piece of a larger per-project layout. This doc covers the
-rest: where `repo/` sits, Claude Code's directory access rules, and lessons that don't belong in
+rest: where `repo-project/` sits, Claude Code's directory access rules, and lessons that don't belong in
 the context-system writeup specifically. Grew out of the Epidemic Sound MMM engagement; a starting
 point to tweak per project, not a final answer.
 
@@ -12,47 +19,60 @@ point to tweak per project, not a final answer.
 ```
 <project-name>/
   context/                    See README.md. Obsidian-only, never git-tracked (or tracked in its
-                               own separate, unpublished history) — not part of repo/'s git repo.
+                               own separate, unpublished history) — not part of repo-project/'s git repo.
     misc/
       primers/                 domain refreshers (stats/ML concepts, methodology explainers)
       lessons-learned.md        running list, updated as you go — not just at project close
       claude-setup.md           per-project Claude operational notes: credentials refs,
                                sheet IDs, auth method — never the credentials themselves
+      project-skeleton.md       this file, once copied — the setup checklist for this project
     documents/
       slides/                  decks, reference materials, pptx exports
-    next-meeting.md            day-to-day working notes: agenda/prep for the next call, plus a
-                               running todo list at the bottom — the file you actually write into
-  repo/                         the ONLY git-tracked directory — see §2 (includes commit-guide.md,
-                               since it's the only directory commits actually apply to)
+  next-meeting.md              day-to-day working notes: agenda/prep for the next call, plus a
+                               running todo list at the bottom — the file you actually write into.
+                               The one non-code file that lives at project root, not under context/,
+                               since it's the thing you touch most often.
+  repo-project/                RENAME to repo-<slug> at kickoff (e.g. repo-es) — the ONLY
+                               git-tracked directory — see §2 (includes commit-guide.md, since
+                               it's the only directory commits actually apply to). If you rename
+                               it, update the repo-project/ paths in this file's own access table
+                               (§3) and in .claude/settings.json to match.
   .claude/
     settings.json              project-level permission rules — see §3
 ```
 
-Everything that isn't code lives under `context/` — the project root is just `context/`, `repo/`,
-and `.claude/` (tooling config, not project knowledge).
+Everything that isn't code lives under `context/`, with the single exception of `next-meeting.md` —
+the project root ends up being `context/`, `next-meeting.md`, `repo-<slug>/`, and `.claude/`
+(tooling config, not project knowledge).
 
-**Why `context/` and `repo/` are strictly separate:** `context/` holds client-sensitive material
+**Why `context/` and `repo-project/` are strictly separate:** `context/` holds client-sensitive material
 (transcripts, internal decisions, sometimes PII-adjacent notes) that should never end up on a
-shared GitHub remote. `repo/` is the actual deliverable codebase with its own remote. On the ES
+shared GitHub remote. `repo-project/` is the actual deliverable codebase with its own remote. On the ES
 project this boundary was clean and worked well — the one thing to avoid is what happened there: a
-second, vestigial `.git` repo got initialized at the project root (wrapping `repo/` as a
-subdirectory) early on and then abandoned once `repo/`'s own git repo took over. It just sat there
-accumulating a confusing diff against a structure that no longer existed. **Only git-init `repo/`,
+second, vestigial `.git` repo got initialized at the project root (wrapping `repo-project/` as a
+subdirectory) early on and then abandoned once `repo-project/`'s own git repo took over. It just sat there
+accumulating a confusing diff against a structure that no longer existed. **Only git-init `repo-project/`,
 never the project root.**
 
 ---
 
-## 2. `repo/` skeleton
+## 2. `repo-project/` skeleton (rename to `repo-<slug>/` at kickoff)
+
+`repo-project/` is a placeholder name. Rename it to match the project — `repo-es/` for Epidemic
+Sound, for example — as one of the first things you do, not something to circle back to later
+(same reasoning as "settle folder names before the first working session" in §4). Once renamed,
+update every `repo-project/` reference in this file's §1/§3 and in `.claude/settings.json` to the
+new name.
 
 This is the part you'll tweak most per project type — `ingest/` → `preprocessing/` → `eda/` is
 MMM-specific. The scaffolding around it generalized well and is worth keeping regardless of
 domain:
 
 ```
-repo/
+repo-project/
   AGENTS.md                   single source of truth for a coding agent: what the project is,
                                pipeline order, repo layout, and the conventions every script
-                               follows. Template at repo/AGENTS.md — includes the
+                               follows. Template at repo-project/AGENTS.md — includes the
                                context-system workflow (summarise-meeting after every meeting,
                                add-project-context for everything else, read
                                context/main-summary.md + meetings/ for orientation)
@@ -78,7 +98,7 @@ repo/
 ```
 
 Conventions worth carrying forward regardless of project type (all validated on ES) are listed in
-`repo/AGENTS.md`.
+`repo-project/AGENTS.md`.
 
 ---
 
@@ -91,8 +111,8 @@ in a `settings.json`, with per-tool, glob-scoped rules. Template at `.claude/set
 
 | Directory | Access | Why |
 |---|---|---|
-| `repo/scripts/`, `repo/config/` | read-write | primary code Claude edits |
-| `repo/data/`, `repo/outputs/` | read-write | pipeline needs full read/write; already gitignored |
+| `repo-project/scripts/`, `repo-project/config/` | read-write | primary code Claude edits |
+| `repo-project/data/`, `repo-project/outputs/` | read-write | pipeline needs full read/write; already gitignored |
 | `context/**` | read-write | Claude actively builds/maintains meeting summaries + decision log |
 | `context/misc/primers/`, `context/misc/lessons-learned.md` | read-only | reference material, shouldn't get silently rewritten |
 | `context/misc/claude-setup.md` | read-write | Claude updates this as new access/credentials get granted |
@@ -153,5 +173,5 @@ password manager or `.env` file outside the tracked/visible tree, referenced by 
 
 - Hook up to Gmail/GDrive/Slack by default for a new project, rather than per-project setup each
   time?
-- A Claude skill that periodically sweeps `context/` and `repo/` to flag documentation that looks
+- A Claude skill that periodically sweeps `context/` and `repo-project/` to flag documentation that looks
   stale given more recent notes/decisions — a freshness check, not just a search.

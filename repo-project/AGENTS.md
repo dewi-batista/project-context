@@ -1,7 +1,8 @@
 # AGENTS.md (template)
 
 Instructions for coding agents (and human reviewers) working on this project. Copy into
-`repo/AGENTS.md` at project kickoff and fill in the project-specific sections below (pipeline
+`repo-<slug>/AGENTS.md` at project kickoff — after renaming `repo-project/` to `repo-<slug>/`, see
+`context/misc/project-skeleton.md` §2 — and fill in the project-specific sections below (pipeline
 order, repo layout, conventions) — the context-system sections are generic and should be kept
 as-is.
 
@@ -23,8 +24,8 @@ the project, or at the start of a new session where project history matters, rea
    that's already been done.
 3. `context/notes/`, if it exists — per-topic deep dives (methodology, open questions,
    assumptions). Not scaffolded by default; created per-project once there's an actual need. On a
-   data-heavy project these live in `context/notes/data/` and mirror `repo/scripts/preprocessing/`
-   one-to-one by source name.
+   data-heavy project these live in `context/notes/data/` and mirror this repo's own
+   `scripts/preprocessing/` one-to-one by source name.
 4. Only fall back to a meeting's raw transcript/gemini-summary in `meetings/scratch/` if no
    reconciled `meetings/<name>.md` exists yet (i.e. it's still pending reconciliation) — check the
    discrepancies section of the newest related reconciled summaries first, since they often surface
@@ -59,12 +60,12 @@ verified.
 
 ## Pipeline, in order
 
-*(Fill in: the actual script/stage order for this project's `repo/scripts/` — e.g. ingest →
+*(Fill in: the actual script/stage order for this repo's `scripts/` — e.g. ingest →
 preprocessing → analysis — with the run commands for each stage.)*
 
 ## Repo layout
 
-*(Fill in: a short tree + one-line description per top-level `repo/` folder.)*
+*(Fill in: a short tree + one-line description per top-level folder in this repo.)*
 
 ## Conventions every script follows
 
