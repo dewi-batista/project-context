@@ -18,14 +18,17 @@ point to tweak per project, not a final answer.
       lessons-learned.md        running list, updated as you go — not just at project close
       claude-setup.md           per-project Claude operational notes: credentials refs,
                                sheet IDs, auth method — never the credentials themselves
-  slides/                       decks, reference materials, pptx exports
+    slides/                    decks, reference materials, pptx exports
+    todo.md                    running task list
+    next-meeting.md            prep notes/agenda for the next scheduled meeting
   repo/                         the ONLY git-tracked directory — see §2 (includes commit-guide.md,
                                since it's the only directory commits actually apply to)
-  todo.md
-  next-meeting.md
   .claude/
     settings.json              project-level permission rules — see §3
 ```
+
+Everything that isn't code lives under `context/` — the project root is just `context/`, `repo/`,
+and `.claude/` (tooling config, not project knowledge).
 
 **Why `context/` and `repo/` are strictly separate:** `context/` holds client-sensitive material
 (transcripts, internal decisions, sometimes PII-adjacent notes) that should never end up on a
@@ -93,7 +96,7 @@ in a `settings.json`, with per-tool, glob-scoped rules. Template at `.claude/set
 | `context/misc/primers/`, `context/misc/lessons-learned.md` | read-only | reference material, shouldn't get silently rewritten |
 | `context/misc/claude-setup.md` | read-write | Claude updates this as new access/credentials get granted |
 | any secrets/credentials file | **deny (no access)** | see caveat below — don't rely on this alone |
-| `slides/` | read-only, or deny | finished deliverables; rarely something Claude should edit |
+| `context/slides/` | read-only, or deny | finished deliverables; rarely something Claude should edit |
 
 **Caveats worth knowing (confirmed against current Claude Code docs), not just assumed:**
 

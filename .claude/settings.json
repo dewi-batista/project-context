@@ -7,7 +7,7 @@
     ],
     "deny": [
       "Read(context/misc/secrets/**)",
-      "Edit(slides/**)",
+      "Edit(context/slides/**)",
       "Bash(rm -rf *)"
     ],
     "ask": [

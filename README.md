@@ -38,11 +38,20 @@ context/
 │                              # (methodology, open questions, assumptions). More generally,
 │                              # split into per-workstream folders (e.g. modelling/) — same
 │                              # notes-<subject>.md convention either way.
-└── misc/                     # non-context knowledge that isn't project decisions/comms —
-                               # domain primers, running lessons-learned, per-project Claude
-                               # operational notes. See project-skeleton.md §3 for the access
-                               # table (parts of misc/ are read-only, secrets are denied outright).
+├── misc/                     # non-context knowledge that isn't project decisions/comms —
+│                              # domain primers, running lessons-learned, per-project Claude
+│                              # operational notes. See project-skeleton.md §3 for the access
+│                              # table (parts of misc/ are read-only, secrets are denied outright).
+├── slides/                   # decks, reference materials, pptx exports — finished deliverables,
+│                              # normally read-only or denied to Claude (see project-skeleton.md §3)
+├── todo.md                   # running task list
+└── next-meeting.md           # prep notes/agenda for the next scheduled meeting
 ```
+
+`context/` is the whole non-code side of the project — everything that isn't `repo/` lives here,
+including `misc/`, `slides/`, and the two lightweight project-management files above. See
+[`project-skeleton.md`](project-skeleton.md) §1 for why the project root ends up being just
+`context/`, `repo/`, and `.claude/`.
 
 This repo's `context/` is exactly this skeleton, empty and ready to copy into a new project.
 
