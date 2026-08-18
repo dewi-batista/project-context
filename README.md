@@ -111,10 +111,10 @@ repo, and walks through `project-skeleton.md`'s kickoff checklist with you (fill
 Doing it by hand instead (what the skill automates):
 
 ```sh
-cp -r ~/Documents/project-context/context <path-to-new-project>/context
-cp -r ~/Documents/project-context/repo-project <path-to-new-project>/repo-project
-cp ~/Documents/project-context/todo-project.md <path-to-new-project>/todo-project.md
-cp -r ~/Documents/project-context/.claude <path-to-new-project>/.claude
+cp -r ~/Documents/cromen-wyllt/work/project-context/context <path-to-new-project>/context
+cp -r ~/Documents/cromen-wyllt/work/project-context/repo-project <path-to-new-project>/repo-project
+cp ~/Documents/cromen-wyllt/work/project-context/todo-project.md <path-to-new-project>/todo-project.md
+cp -r ~/Documents/cromen-wyllt/work/project-context/.claude <path-to-new-project>/.claude
 ```
 
 **Then open `context/misc/project-skeleton.md` and work through it** — it's the setup checklist,
