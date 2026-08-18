@@ -4,6 +4,9 @@ A personal pattern for keeping durable, reusable project context — decisions, 
 
 This pattern grew organically on the Epidemic Sound MMM engagement (`~/Documents/cromen-wyllt/work/epidemic-sound/context/`). This repo extracts it into a standalone template + writeup so it's reusable on future projects, rather than something re-derived from scratch each time.
 
+`context/` is one piece of a project — see [`project-skeleton.md`](project-skeleton.md) for how it
+sits alongside `repo/`, `misc/`, and Claude Code's directory access rules.
+
 ## Why
 
 Two failure modes this solves:
@@ -28,8 +31,11 @@ context/
 │   └── email-formatting-guide.md
 ├── planning/                 # checklists, plan docs, one-off scripts (e.g. deck builders)
 └── notes/                    # freeform topic notes — notes-<subject>.md, one per subject.
-                               # On a project with a few distinct workstreams, split into per-workstream
-                               # folders instead (e.g. data/, modelling/) — same notes-<subject>.md convention.
+                               # On a data-heavy project, split into notes/data/ to mirror
+                               # repo/scripts/preprocessing/ one deep-dive note per source
+                               # (methodology, open questions, assumptions). More generally,
+                               # split into per-workstream folders (e.g. modelling/) — same
+                               # notes-<subject>.md convention either way.
 ```
 
 This repo's `template/context/` is exactly this skeleton, empty and ready to copy into a new project.
@@ -67,10 +73,16 @@ Three intake paths — two backed by skills, one manual:
 ## Setting up a new project
 
 ```sh
-cp -r ~/Documents/project-context/template/context <path-to-new-project-repo>/context
+cp -r ~/Documents/project-context/template/context <path-to-new-project>/context
+cp -r ~/Documents/project-context/template/repo <path-to-new-project>/repo
+cp -r ~/Documents/project-context/template/.claude <path-to-new-project>/.claude
+cp -r ~/Documents/project-context/template/misc <path-to-new-project>/misc
 ```
 
-Then fill in `context/summaries/main.md`'s placeholders and start logging as the project moves — don't wait until there's "enough" to write down.
+Then fill in `context/summaries/main.md`'s placeholders and `repo/AGENTS.md`'s project-specific
+sections, and start logging as the project moves — don't wait until there's "enough" to write down.
+See [`project-skeleton.md`](project-skeleton.md) for what `repo/`, `misc/`, and `.claude/settings.json`
+are for.
 
 ## Related skills
 

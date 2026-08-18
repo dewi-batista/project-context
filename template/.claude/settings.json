@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(repo/**)", "Edit(repo/**)", "Write(repo/**)",
+      "Read(context/**)", "Edit(context/**)", "Write(context/**)",
+      "Bash(uv run *)", "Bash(git *)"
+    ],
+    "deny": [
+      "Read(misc/secrets/**)",
+      "Edit(slides/**)",
+      "Bash(rm -rf *)"
+    ],
+    "ask": [
+      "Bash(git push *)"
+    ]
+  }
+}
