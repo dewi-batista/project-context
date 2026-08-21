@@ -85,11 +85,12 @@ See `context/main-summary.md` for a filled-in skeleton with prompts for each sec
 
 ## How context gets in
 
-Three intake paths — two backed by skills, one manual:
+Four intake paths — three backed by skills, one manual:
 
 1. **A meeting with a transcript** → the `summarise-meeting` skill. Cross-checks the fast Gemini auto-summary against the full raw transcript, catches places where the paraphrase doesn't match what was actually said, writes a reconciled decision-focused summary directly to `meetings/<name>.md`, then propagates any confirmed decisions into `main-summary.md`'s Key Decisions table (and other sections they touch) so the living summary doesn't go stale.
 2. **A chat log, an email thread, or a spoken conversation with no transcript at all** → the `summarise-communication` skill. First classifies which of the three it's looking at, saves the untouched original to `communication/scratch/`, then reformats/archives a cleaned-up (verbatim, not summarized) copy to the matching `communication/` subfolder — the skill itself carries the per-type formatting rules, so there's no separate style guide to consult. Then extracts decisions, action items, and open questions and saves those into whichever of the structures above already fits (or into `main-summary.md` directly for something that belongs at the top level, like a scope change).
-3. **Manual notes** — written by hand into `todo-project.md` while working day-to-day, or into a `notes/` directory (created when there's an actual need — see "The structure" above) for something that deserves its own topic file. Not skill-mediated, just following the same conventions so it stays discoverable later instead of living only in a scratch file that gets deleted.
+3. **Any other new artifact relevant to the project** — a repo someone shares, a spec doc, a dataset description, a one-off link — that doesn't fit either shape above → the `update-project-context` skill. Actually looks at the artifact (e.g. `gh repo view`/clones a repo rather than guessing from the URL), checks it against what `main-summary.md` and `notes/` already know, and routes only what's genuinely new to wherever the template already keeps that kind of thing (decisions → `main-summary.md`, a technical deep-dive → `notes/`, something that changes the actual codebase → `AGENTS.md`).
+4. **Manual notes** — written by hand into `todo-project.md` while working day-to-day, or into a `notes/` directory (created when there's an actual need — see "The structure" above) for something that deserves its own topic file. Not skill-mediated, just following the same conventions so it stays discoverable later instead of living only in a scratch file that gets deleted.
 
 ## Conventions
 
@@ -130,3 +131,4 @@ Then start logging as the project moves — don't wait until there's "enough" to
 - [`make-new-project`](~/.claude/skills/make-new-project/) — scaffolds a new project from this template in the current directory: copies, renames the placeholders to match the directory's name, git-inits the repo, and walks through `project-skeleton.md`'s kickoff checklist
 - [`summarise-communication`](~/.claude/skills/summarise-communication/) — pasted chat, Gmail, or spoken-conversation recap → verbatim archive under `communication/` + structured context in the decision log
 - [`summarise-meeting`](~/.claude/skills/summarise-meeting/) — transcript + AI summary → reconciled decision-focused summary, with confirmed decisions propagated into `main-summary.md`
+- [`update-project-context`](~/.claude/skills/update-project-context/) — a new repo/doc/link relevant to the project → understood, checked against what's already known, and routed to whichever of `main-summary.md`/`notes/`/`AGENTS.md` actually applies
