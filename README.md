@@ -25,14 +25,14 @@ context/
 ├── main-log.md               # chronological activity log, one entry per logged event, appended
 │                             # to automatically by the summarise-* skills — see the file's own
 │                             # header
-├── meetings/
-│   ├── <name>.md             # reconciled, decision-focused summaries, directly in meetings/
-│   │                         # (see "summarise-meeting" below) — the trustworthy version, and
-│   │                         # the only thing here you normally need to read
-│   └── scratch/
-│       ├── transcripts/      # raw transcripts — ground truth, but messy
-│       └── gemini-summaries/ # fast AI-generated summaries — lossy, sometimes overconfident paraphrasing
-├── communication/
+├── communication/             # everything communicated, whether in a meeting or otherwise
+│   ├── meetings/
+│   │   ├── <name>.md         # reconciled, decision-focused summaries, directly in meetings/
+│   │   │                     # (see "summarise-meeting" below) — the trustworthy version, and
+│   │   │                     # the only thing here you normally need to read
+│   │   └── scratch/
+│   │       ├── transcripts/      # raw transcripts — ground truth, but messy
+│   │       └── gemini-summaries/ # fast AI-generated summaries — lossy, sometimes overconfident paraphrasing
 │   ├── emails/               # reformatted email threads
 │   ├── direct-messages/      # reformatted chat/DM pastes
 │   ├── offline/              # cleaned-up recaps of in-person/phone/unrecorded conversations
@@ -91,7 +91,7 @@ See `context/main-summary.md` for a filled-in skeleton with prompts for each sec
 
 Four intake paths — three backed by skills, one manual:
 
-1. **A meeting with a transcript** → the `summarise-meeting` skill. Cross-checks the fast Gemini auto-summary against the full raw transcript, catches places where the paraphrase doesn't match what was actually said, writes a reconciled decision-focused summary directly to `meetings/<name>.md`, then propagates any confirmed decisions into `main-summary.md`'s Key Decisions table (and other sections they touch) so the living summary doesn't go stale.
+1. **A meeting with a transcript** → the `summarise-meeting` skill. Cross-checks the fast Gemini auto-summary against the full raw transcript, catches places where the paraphrase doesn't match what was actually said, writes a reconciled decision-focused summary directly to `communication/meetings/<name>.md`, then propagates any confirmed decisions into `main-summary.md`'s Key Decisions table (and other sections they touch) so the living summary doesn't go stale.
 2. **A chat log, an email thread, or a spoken conversation with no transcript at all** → the `summarise-communication` skill. First classifies which of the three it's looking at, saves the untouched original to `communication/scratch/`, then reformats/archives a cleaned-up (verbatim, not summarized) copy to the matching `communication/` subfolder — the skill itself carries the per-type formatting rules, so there's no separate style guide to consult. Then extracts decisions, action items, and open questions and saves those into whichever of the structures above already fits (or into `main-summary.md` directly for something that belongs at the top level, like a scope change).
 3. **Any other new artifact relevant to the project** — a repo someone shares, a spec doc, a dataset description, a one-off link — that doesn't fit either shape above → the `update-project-context` skill. Actually looks at the artifact (e.g. `gh repo view`/clones a repo rather than guessing from the URL), checks it against what `main-summary.md` and `misc/notes/` already know, and routes only what's genuinely new to wherever the template already keeps that kind of thing (decisions → `main-summary.md`, a technical deep-dive → `misc/notes/`, something that changes the actual codebase → `AGENTS.md`).
 4. **Manual notes** — written by hand into `todo-project.md` while working day-to-day, or into a `misc/notes/` directory (created when there's an actual need — see "The structure" above) for something that deserves its own topic file. Not skill-mediated, just following the same conventions so it stays discoverable later instead of living only in a scratch file that gets deleted.
@@ -100,9 +100,9 @@ Four intake paths — three backed by skills, one manual:
 
 - **`[[wikilink]]` cross-references.** `main-summary.md` links out to topic notes by filename stem (e.g. "see `[[notes-gqv]]`"), Obsidian-style — keeps notes individually readable but connected without duplicating content into `main-summary.md` itself.
 - **Date-stamp and attribute every logged decision.** `**Redefined 2026-07-14 (per Dewi)**`, not just "we changed this." A decision without a date and an owner is unverifiable later, and worse, un-overridable — nobody can tell if it's still current.
-- **Meeting filenames: `YYYYMMDD-attendee[-attendee2].md`.** Matched exactly across `meetings/scratch/transcripts/`, `meetings/scratch/gemini-summaries/`, and the reconciled `meetings/<name>.md`, so the three can be cross-referenced by name alone and a missing pairing is obvious at a glance. `communication/{emails,direct-messages,offline}/` and their `communication/scratch/` originals follow the same convention.
+- **Meeting filenames: `YYYYMMDD-attendee[-attendee2].md`.** Matched exactly across `communication/meetings/scratch/transcripts/`, `communication/meetings/scratch/gemini-summaries/`, and the reconciled `communication/meetings/<name>.md`, so the three can be cross-referenced by name alone and a missing pairing is obvious at a glance. `communication/{emails,direct-messages,offline}/` and their `communication/scratch/` originals follow the same convention.
 - **Reformat communication, don't paraphrase it.** Light cleanup only per source type — strip email signature blocks/quote-nesting, strip chat read-receipts/reaction noise, lightly clean up an offline recap — but preserve exact numbers, dates, and commitments verbatim. Handled by the `summarise-communication` skill, which carries the per-type rules directly rather than a separate style guide.
-- **`communication/scratch/` is write-only.** It holds each source's untouched original, kept purely for a human's future reference in its original format — Claude never reads it back, full stop (unlike `meetings/scratch/`, which is a legitimate fallback when no reconciled summary exists yet; see `repo-project/AGENTS.md`).
+- **`communication/scratch/` is write-only.** It holds each source's untouched original, kept purely for a human's future reference in its original format — Claude never reads it back, full stop (unlike `communication/meetings/scratch/`, which is a legitimate fallback when no reconciled summary exists yet; see `repo-project/AGENTS.md`).
 - **Never commit raw client data or secrets.** A scratch/raw-data dump directory (e.g. `context/misc/`) stays gitignored. Treat the whole repo as if it could go public, even when it's private.
 
 ## Setting up a new project

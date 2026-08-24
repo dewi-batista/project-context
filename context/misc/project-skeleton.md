@@ -82,7 +82,7 @@ repo-project/
                                follows. Template at repo-project/AGENTS.md — includes the
                                context-system workflow (summarise-meeting after every meeting,
                                summarise-communication for everything else, read
-                               context/main-summary.md + meetings/ for orientation)
+                               context/main-summary.md + communication/meetings/ for orientation)
                                plus placeholders for the project-specific sections.
   commit-guide.md              when/how to commit — see the file itself
   README.md                    one-page human-facing scope summary
@@ -154,7 +154,8 @@ password manager or `.env` file outside the tracked/visible tree, referenced by 
   one**, not partway through. It was the single highest-value pattern this project produced — built
   as a proper Claude Skill (`summarise-meeting`) — but only after ~15 meetings had already
   accumulated as ad hoc notes on ES (in a `scratch-summaries/` folder since folded away — the
-  current template skips straight to `meetings/<name>.md` once the skill exists from day one).
+  current template skips straight to `communication/meetings/<name>.md` once the skill exists from
+  day one).
 - **One notes file per source, one preprocessing script per source, one EDA/analysis section per
   source** — keeping these in 1:1:1 correspondence (same name, different folder) made
   cross-referencing trivial all project long.

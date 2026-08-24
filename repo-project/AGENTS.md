@@ -17,16 +17,16 @@ project history matters — it has the full reading order, kept there as the sin
 so it doesn't drift from this file.
 
 Two directories are always off-limits to read directly, regardless of what `get-context` says:
-`context/meetings/scratch/` (raw transcripts/gemini-summaries — read only as a documented fallback
-when no reconciled summary exists yet) and `context/communication/scratch/` (untouched
-communication originals, written once by the `summarise-communication` skill — never read back at
-all, purely a human's future-reference archive).
+`context/communication/meetings/scratch/` (raw transcripts/gemini-summaries — read only as a
+documented fallback when no reconciled summary exists yet) and `context/communication/scratch/`
+(untouched communication originals, written once by the `summarise-communication` skill — never
+read back at all, purely a human's future-reference archive).
 
 ## Logging new context
 
 - **After each meeting**, run the `summarise-meeting` skill (`/summarise-meeting`) to reconcile the
-  Gemini transcript + AI summary (read from `context/meetings/scratch/`) into
-  `context/meetings/<name>.md`. Do this soon after the meeting, not batched up — reconciliation
+  Gemini transcript + AI summary (read from `context/communication/meetings/scratch/`) into
+  `context/communication/meetings/<name>.md`. Do this soon after the meeting, not batched up — reconciliation
   works best while the transcript is easy to spot-check and the decision log is still fresh context
   for catching discrepancies.
 - **For everything else** — a pasted chat log, an email thread, a spoken conversation with no
