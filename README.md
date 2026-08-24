@@ -22,10 +22,9 @@ Two failure modes this solves:
 ```
 context/
 ├── main-summary.md           # the living project summary — Claude-maintained, not hand-written
-├── main-log.md               # experimental: chronological activity log, one entry per logged
-│                             # event, appended to automatically by the summarise-* skills — see
-│                             # the file's own header. Included in the template for now; drop it
-│                             # per-project (or from the template entirely) if it doesn't pay off.
+├── main-log.md               # chronological activity log, one entry per logged event, appended
+│                             # to automatically by the summarise-* skills — see the file's own
+│                             # header
 ├── meetings/
 │   ├── <name>.md             # reconciled, decision-focused summaries, directly in meetings/
 │   │                         # (see "summarise-meeting" below) — the trustworthy version, and

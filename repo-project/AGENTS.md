@@ -32,8 +32,8 @@ all, purely a human's future-reference archive).
 - **For everything else** — a pasted chat log, an email thread, a spoken conversation with no
   transcript — use the `summarise-communication` skill to extract decisions/action items and file
   them into the right place under `context/`.
-- Both skills append an entry to `context/main-log.md` if it exists (an experimental chronological
-  activity log — see that file's own header for what it's for).
+- Both skills append an entry to `context/main-log.md` if it exists (a chronological activity log
+  — see that file's own header for what it's for).
 - **Decisions get a date and an owner** wherever they're logged: `**Redefined 2026-07-14 (per
   Dewi)**`, not just "we changed this." Undated, unattributed decisions are unverifiable later.
 
