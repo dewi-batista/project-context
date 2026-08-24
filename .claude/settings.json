@@ -6,8 +6,6 @@
       "Read(context/misc/secrets/**)"
     ],
     "ask": [
-      "Bash(git push *)",
-      "Bash(rm -rf *)"
     ]
   }
 }
