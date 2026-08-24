@@ -1,19 +1,13 @@
 {
   "permissions": {
     "allow": [
-      "Read(repo-project/**)", "Edit(repo-project/**)", "Write(repo-project/**)",
-      "Read(context/**)", "Edit(context/**)", "Write(context/**)",
-      "Bash(uv run *)", "Bash(git *)"
     ],
     "deny": [
-      "Read(context/misc/secrets/**)",
-      "Edit(context/misc/primers/**)",
-      "Edit(context/misc/lessons-learned.md)",
-      "Edit(context/documents/**)",
-      "Bash(rm -rf *)"
+      "Read(context/misc/secrets/**)"
     ],
     "ask": [
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(rm -rf *)"
     ]
   }
 }
