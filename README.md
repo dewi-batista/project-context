@@ -40,13 +40,17 @@ context/
 │       ├── emails/            # its original format, one-to-one by name. Claude never reads this
 │       ├── direct-messages/   # back — it's a write-only archive kept purely for a human's future
 │       └── offline/           # reference, not a working source (see summarise-communication skill).
-├── misc/                     # non-context knowledge that isn't project decisions/comms —
-│                             # domain primers, running lessons-learned, per-project Claude
-│                             # operational notes. See project-skeleton.md §3 for the access
-│                             # table (parts of misc/ are read-only, secrets are denied outright).
-└── documents/
-    └── slides/               # decks, reference materials, pptx exports — finished deliverables,
-                               # normally read-only or denied to Claude (see project-skeleton.md §3)
+└── misc/                     # non-context knowledge that isn't project decisions/comms — domain
+                              # primers, running lessons-learned, per-project Claude operational
+                              # notes, and everything below. See project-skeleton.md §3 for the
+                              # access table (parts of misc/ are read-only, secrets are denied
+                              # outright).
+    ├── diagrams/             # Excalidraw/other diagram source files
+    ├── important-documents/
+    │   └── slides/           # decks, reference materials, pptx exports — finished deliverables,
+    │                         # normally read-only or denied to Claude (see project-skeleton.md §3)
+    └── notes/                # freeform per-topic deep dives — not scaffolded by default, add it
+                              # here (not at the project root) once there's an actual need
 ```
 
 `todo-project.md` (renamed `todo-<slug>.md` at kickoff, same treatment as `repo-project/` below) —
@@ -55,13 +59,14 @@ is the one non-code file that lives at the *project root*, not under `context/`,
 file you actually write into most often. Everything else non-code is under `context/`;
 `main-summary.md` stays Claude-maintained, not a scratchpad.
 
-Deliberately minimal to start: `notes/` (freeform topic notes) and `planning/` (checklists, plan
-docs) aren't scaffolded by default — add them per-project once there's an actual need, rather than
-carrying empty structure from day one. Same `notes-<subject>.md` convention as before if/when you
-add `notes/`; split into a subfolder per workstream (e.g. `notes/data/`, mirroring
-`repo-project/scripts/preprocessing/` on a data-heavy project) if it grows past a handful of files.
+Deliberately minimal to start: `misc/notes/` (freeform topic notes) and `planning/` (checklists,
+plan docs, still at the `context/` top level) aren't scaffolded by default — add them per-project
+once there's an actual need, rather than carrying empty structure from day one. Same
+`notes-<subject>.md` convention as before if/when you add `misc/notes/`; split into a subfolder per
+workstream (e.g. `misc/notes/data/`, mirroring `repo-project/scripts/preprocessing/` on a
+data-heavy project) if it grows past a handful of files.
 
-`context/` is the whole non-code side of the project (`misc/`, `documents/`, meeting/communication
+`context/` is the whole non-code side of the project (`misc/`, meeting/communication
 records) except `todo-project.md`, which sits at the project root alongside it. See
 [`context/misc/project-skeleton.md`](context/misc/project-skeleton.md) §1 for why the project root
 ends up being just `context/`, `todo-<slug>.md`, `repo-<slug>/`, and `.claude/`.
@@ -88,8 +93,8 @@ Four intake paths — three backed by skills, one manual:
 
 1. **A meeting with a transcript** → the `summarise-meeting` skill. Cross-checks the fast Gemini auto-summary against the full raw transcript, catches places where the paraphrase doesn't match what was actually said, writes a reconciled decision-focused summary directly to `meetings/<name>.md`, then propagates any confirmed decisions into `main-summary.md`'s Key Decisions table (and other sections they touch) so the living summary doesn't go stale.
 2. **A chat log, an email thread, or a spoken conversation with no transcript at all** → the `summarise-communication` skill. First classifies which of the three it's looking at, saves the untouched original to `communication/scratch/`, then reformats/archives a cleaned-up (verbatim, not summarized) copy to the matching `communication/` subfolder — the skill itself carries the per-type formatting rules, so there's no separate style guide to consult. Then extracts decisions, action items, and open questions and saves those into whichever of the structures above already fits (or into `main-summary.md` directly for something that belongs at the top level, like a scope change).
-3. **Any other new artifact relevant to the project** — a repo someone shares, a spec doc, a dataset description, a one-off link — that doesn't fit either shape above → the `update-project-context` skill. Actually looks at the artifact (e.g. `gh repo view`/clones a repo rather than guessing from the URL), checks it against what `main-summary.md` and `notes/` already know, and routes only what's genuinely new to wherever the template already keeps that kind of thing (decisions → `main-summary.md`, a technical deep-dive → `notes/`, something that changes the actual codebase → `AGENTS.md`).
-4. **Manual notes** — written by hand into `todo-project.md` while working day-to-day, or into a `notes/` directory (created when there's an actual need — see "The structure" above) for something that deserves its own topic file. Not skill-mediated, just following the same conventions so it stays discoverable later instead of living only in a scratch file that gets deleted.
+3. **Any other new artifact relevant to the project** — a repo someone shares, a spec doc, a dataset description, a one-off link — that doesn't fit either shape above → the `update-project-context` skill. Actually looks at the artifact (e.g. `gh repo view`/clones a repo rather than guessing from the URL), checks it against what `main-summary.md` and `misc/notes/` already know, and routes only what's genuinely new to wherever the template already keeps that kind of thing (decisions → `main-summary.md`, a technical deep-dive → `misc/notes/`, something that changes the actual codebase → `AGENTS.md`).
+4. **Manual notes** — written by hand into `todo-project.md` while working day-to-day, or into a `misc/notes/` directory (created when there's an actual need — see "The structure" above) for something that deserves its own topic file. Not skill-mediated, just following the same conventions so it stays discoverable later instead of living only in a scratch file that gets deleted.
 
 ## Conventions
 
@@ -130,4 +135,4 @@ Then start logging as the project moves — don't wait until there's "enough" to
 - [`make-new-project`](~/.claude/skills/make-new-project/) — scaffolds a new project from this template in the current directory: copies, renames the placeholders to match the directory's name, git-inits the repo, and walks through `project-skeleton.md`'s kickoff checklist
 - [`summarise-communication`](~/.claude/skills/summarise-communication/) — pasted chat, Gmail, or spoken-conversation recap → verbatim archive under `communication/` + structured context in the decision log
 - [`summarise-meeting`](~/.claude/skills/summarise-meeting/) — transcript + AI summary → reconciled decision-focused summary, with confirmed decisions propagated into `main-summary.md`
-- [`update-project-context`](~/.claude/skills/update-project-context/) — a new repo/doc/link relevant to the project → understood, checked against what's already known, and routed to whichever of `main-summary.md`/`notes/`/`AGENTS.md` actually applies
+- [`update-project-context`](~/.claude/skills/update-project-context/) — a new repo/doc/link relevant to the project → understood, checked against what's already known, and routed to whichever of `main-summary.md`/`misc/notes/`/`AGENTS.md` actually applies
