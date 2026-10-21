@@ -32,7 +32,7 @@ context/
 ├── communication/             # everything communicated, whether in a meeting or otherwise
 │   ├── meetings/
 │   │   └── <name>.md         # reconciled, decision-focused summaries, directly in meetings/
-│   │                         # (see "summarise-meeting" below) — the trustworthy version, and
+│   │                         # (see "update-project-context" below) — the trustworthy version, and
 │   │                         # the only thing here you normally need to read
 │   ├── emails/               # reformatted email threads
 │   ├── direct-messages/      # reformatted chat/DM pastes
@@ -72,7 +72,7 @@ level only when needed.
 `context/` is the whole non-code side of the project (`documents/`, `misc/`, meeting/communication
 records) except `todo-project.md`, which sits at the project root alongside it. See
 [`context/misc/project-skeleton.md`](context/misc/project-skeleton.md) §1 for why the project root
-ends up being just `context/`, `todo-<slug>.md`, `repo-<slug>/`, and `.claude/`.
+contains `context/`, `todo-<slug>.md`, `repo-<slug>/`, `AGENTS.md`, `CLAUDE.md` and `.claude/`.
 
 This repo's `context/` is exactly this skeleton, empty and ready to copy into a new project.
 
@@ -105,10 +105,10 @@ for the columns and maintenance rules.
 
 ## How context gets in
 
-Four intake paths — three backed by skills, one manual:
+Three source workflows in `update-project-context`, plus manual notes:
 
-1. **A meeting with a transcript** → the `summarise-meeting` skill. Cross-checks the fast Gemini auto-summary against the full raw transcript, catches places where the paraphrase doesn't match what was actually said, writes a reconciled decision-focused summary directly to `communication/meetings/<name>.md`, then propagates any confirmed decisions into `main-summary.md`'s Key Decisions table (and other sections they touch) so the living summary doesn't go stale.
-2. **A chat log, an email thread, or a spoken conversation with no transcript at all** → the `summarise-communication` skill. Saves email/chat originals to `communication/scratch/`, then reformats/archives a cleaned-up (verbatim, not summarized) copy to the matching `communication/` subfolder. Spoken recaps go into `communication/meetings/`, clearly labelled as recaps without transcript verification — the skill itself carries the per-type formatting rules, so there's no separate style guide to consult. Then extracts decisions, action items, and open questions and saves those into whichever of the structures above already fits (or into `main-summary.md` directly for something that belongs at the top level, like a scope change).
+1. **A meeting with a transcript** → the `update-project-context` meeting workflow. Cross-checks the fast Gemini auto-summary against the full raw transcript, catches places where the paraphrase doesn't match what was actually said, writes a reconciled decision-focused summary directly to `communication/meetings/<name>.md`, then propagates any confirmed decisions into `main-summary.md`'s Key Decisions table (and other sections they touch) so the living summary doesn't go stale.
+2. **A chat log, an email thread, or a spoken conversation with no transcript at all** → the `update-project-context` communication workflow. Saves email/chat originals to `communication/scratch/`, then reformats/archives a cleaned-up (verbatim, not summarized) copy to the matching `communication/` subfolder. Spoken recaps go into `communication/meetings/`, clearly labelled as recaps without transcript verification — the skill itself carries the per-type formatting rules, so there's no separate style guide to consult. Then extracts decisions, action items, and open questions and saves those into whichever of the structures above already fits (or into `main-summary.md` directly for something that belongs at the top level, like a scope change).
 3. **Any other new artifact relevant to the project** — a repo someone shares, a spec doc, a dataset description, a one-off link — that doesn't fit either shape above → the `update-project-context` skill. Actually looks at the artifact (e.g. `gh repo view`/clones a repo rather than guessing from the URL), checks it against what `main-summary.md` and `misc/notes/` already know, and routes only what's genuinely new to wherever the template already keeps that kind of thing (decisions → `main-summary.md`, a technical deep-dive → `misc/notes/`, something that changes the actual codebase → `AGENTS.md`).
 4. **Manual notes** — written by hand into `todo-project.md` while working day-to-day, or into the `misc/notes/` directory for something that deserves its own topic file. Not skill-mediated, just following the same conventions so it stays discoverable later instead of living only in a scratch file that gets deleted.
 
@@ -117,7 +117,7 @@ Four intake paths — three backed by skills, one manual:
 - **`[[wikilink]]` cross-references.** `main-summary.md` links out to topic notes by filename stem (e.g. "see `[[notes-gqv]]`"), Obsidian-style — keeps notes individually readable but connected without duplicating content into `main-summary.md` itself.
 - **Date-stamp and attribute every logged decision.** `**Redefined 2026-07-14 (per Dewi)**`, not just "we changed this." A decision without a date and an owner is unverifiable later, and worse, un-overridable — nobody can tell if it's still current.
 - **Meeting filenames: `YYYYMMDD-attendee[-attendee2].md`.** Matched exactly across `communication/scratch/meetings/transcripts/`, `communication/scratch/meetings/gemini-summaries/`, and the reconciled `communication/meetings/<name>.md`, so the three can be cross-referenced by name alone and a missing pairing is obvious at a glance. `communication/{emails,direct-messages}/` and their `communication/scratch/` originals follow the same convention.
-- **Reformat communication, don't paraphrase it.** Light cleanup only per source type — strip email signature blocks/quote-nesting, strip chat read-receipts/reaction noise — but preserve exact numbers, dates, and commitments verbatim. Handled by the `summarise-communication` skill, which carries the per-type rules directly rather than a separate style guide.
+- **Reformat communication, don't paraphrase it.** Light cleanup only per source type — strip email signature blocks/quote-nesting, strip chat read-receipts/reaction noise — but preserve exact numbers, dates, and commitments verbatim. Handled by the `update-project-context` communication workflow, which carries the per-type rules directly rather than a separate style guide.
 - **`communication/scratch/` holds untouched originals.** Email and DM originals are write-only archives kept purely for a human's future reference — Claude never reads them back. `communication/scratch/meetings/` is the exception: it is a legitimate fallback when no reconciled summary exists yet (see `repo-project/AGENTS.md`).
 - **Never commit raw client data or secrets.** A scratch/raw-data dump directory (e.g. `context/misc/`) stays gitignored. Treat the whole repo as if it could go public, even when it's private.
 
@@ -153,8 +153,10 @@ Then start logging as the project moves — don't wait until there's "enough" to
 
 ## Related skills
 
-- [`get-context`](~/.claude/skills/get-context/) — reads through `context/` in the right order and reports back a concise orientation; the single source of truth for that reading order, which `AGENTS.md` files point to rather than restate
-- [`make-new-project`](~/.claude/skills/make-new-project/) — scaffolds a new project from this template in the current directory: copies, renames the placeholders to match the directory's name, git-inits the repo, and walks through `project-skeleton.md`'s kickoff checklist
-- [`summarise-communication`](~/.claude/skills/summarise-communication/) — pasted chat, Gmail, or spoken-conversation recap → verbatim archive under `communication/` + structured context in the decision log
-- [`summarise-meeting`](~/.claude/skills/summarise-meeting/) — transcript + AI summary → reconciled decision-focused summary, with confirmed decisions propagated into `main-summary.md`
-- [`update-project-context`](~/.claude/skills/update-project-context/) — a new repo/doc/link relevant to the project → understood, checked against what's already known, and routed to whichever of `main-summary.md`/`misc/notes/`/`AGENTS.md` actually applies
+- `get-project-context` — read-only orientation, run only when Dewi explicitly invokes
+  `/get-project-context` (Claude) or `$get-project-context` (Codex).
+- `make-new-project` — copy this template, rename placeholders, initialize the code
+  repository and work through the kickoff checklist.
+- `update-project-context` — source-specific workflows for meeting reconciliation,
+  communication archival, and inspecting documents, repositories or links; updates
+  durable context without duplication.

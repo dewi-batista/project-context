@@ -92,9 +92,8 @@ repo-project/
   AGENTS.md                   single source of truth for a coding agent: what the project is,
                                pipeline order, repo layout, and the conventions every script
                                follows. Template at repo-project/AGENTS.md — includes the
-                               context-system workflow (summarise-meeting after every meeting,
-                               summarise-communication for everything else, read
-                               context/main-summary.md + communication/meetings/ for orientation)
+                               context-system workflow through update-project-context;
+                               ../context/main-summary.md is the current project summary
                                plus placeholders for the project-specific sections.
   commit-guide.md              when/how to commit — see the file itself
   README.md                    one-page human-facing scope summary
@@ -165,7 +164,7 @@ password manager or `.env` file outside the tracked/visible tree, referenced by 
   deciding names once at kickoff — this is exactly what this repo is for.
 - **Template the meetings pipeline (transcript → gemini-summary → reconciled summary) from day
   one**, not partway through. It was the single highest-value pattern this project produced — built
-  as a proper Claude Skill (`summarise-meeting`) — but only after ~15 meetings had already
+  as a proper Claude Skill (`update-project-context` meeting workflow) — but only after ~15 meetings had already
   accumulated as ad hoc notes on ES (in a `scratch-summaries/` folder since folded away — the
   current template skips straight to `communication/meetings/<name>.md` once the skill exists from
   day one).
@@ -182,7 +181,7 @@ password manager or `.env` file outside the tracked/visible tree, referenced by 
 - Hook up to Gmail/GDrive/Slack by default for a new project, rather than per-project setup each
   time?
 - A periodic sweep of `context/` and `repo-project/` to flag documentation that looks stale given
-  more recent notes/decisions — partially covered now: the `get-context` skill flags it if
+  more recent notes/decisions — partially covered now: the `get-project-context` skill, when explicitly invoked, flags it if
   `main-summary.md` looks stale relative to what it just read, but that's a side effect of getting
   oriented, not a dedicated sweep. A standalone skill for this (triggered on demand, not just as
   part of orientation) is still unbuilt.

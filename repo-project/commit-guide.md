@@ -2,8 +2,8 @@
 
 Instructions for Claude (and the human) on when and how to commit in this repo. This directory
 (named `repo-project/` in the template, renamed to `repo-<slug>/` at kickoff — see
-`context/misc/project-skeleton.md` §2) is the only git-tracked directory in this project —
-`context/` (including `context/misc/`) sits outside its history entirely.
+`../context/misc/project-skeleton.md` §2) is the only git-tracked directory in this project —
+`../context/` (including `../context/misc/`) sits outside its history entirely.
 
 ---
 
