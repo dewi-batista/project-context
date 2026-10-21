@@ -21,17 +21,19 @@ point to tweak per project, not a final answer.
 <project-name>/
   context/                    See README.md. Obsidian-only, never git-tracked (or tracked in its
                                own separate, unpublished history) — not part of repo-project/'s git repo.
-    misc/
+    documents/
+      diagrams/                Excalidraw/other diagram source files
       primers/                 domain refreshers (stats/ML concepts, methodology explainers)
+      slides/                  decks, reference materials, pptx exports
+    misc/
+      demos/                   demo assets and walkthroughs
+      secrets/                 private credentials; denied to agents, never committed
+      test-tools/              reusable testing utilities and fixtures
       lessons-learned.md        running list, updated as you go — not just at project close
       claude-setup.md           per-project Claude operational notes: credentials refs,
                                sheet IDs, auth method — never the credentials themselves
       project-skeleton.md       this file, once copied — the setup checklist for this project
-      diagrams/                Excalidraw/other diagram source files
-      important-documents/
-        slides/                decks, reference materials, pptx exports
-      notes/                   freeform per-topic deep dives — not scaffolded by default, add
-                               it here (not at the project root) once there's an actual need
+      notes/                   freeform per-topic deep dives, kept here rather than at project root
   todo-project.md              RENAME to todo-<slug> at kickoff (e.g. todo-es), same as
                                repo-project/ below. Day-to-day working notes: agenda/prep for the
                                next call, plus a running todo list — the file you actually write
@@ -69,7 +71,7 @@ Sound, for example — as one of the first things you do, not something to circl
 update every `repo-project/` reference in this file's §1/§3 and in `.claude/settings.json` to the
 new name.
 
-Deliberately minimal to start, same reasoning as `context/misc/notes/` and `context/planning/` in
+Deliberately minimal to start, same reasoning as `context/planning/` in
 README.md: `config/` and `scripts/` start flat and empty, no pre-scaffolded subdivision. The right
 shape (an `ingest/`/`preprocessing/`/`eda/` pipeline, a single flat set of scripts, whatever else)
 depends on the project and should get made on the fly as the work actually takes shape, not decided
@@ -108,10 +110,10 @@ in a `settings.json`, with per-tool, glob-scoped rules. Template at `.claude/set
 |---|---|---|
 | `repo-project/**` | read-write | primary code (and any pipeline data/outputs it produces) Claude edits |
 | `context/**` | read-write | Claude actively builds/maintains meeting summaries + decision log |
-| `context/misc/primers/`, `context/misc/lessons-learned.md` | read-only | reference material, shouldn't get silently rewritten |
+| `context/documents/primers/`, `context/misc/lessons-learned.md` | read-only | reference material, shouldn't get silently rewritten |
 | `context/misc/claude-setup.md` | read-write | Claude updates this as new access/credentials get granted |
 | any secrets/credentials file | **deny (no access)** | see caveat below — don't rely on this alone |
-| `context/misc/important-documents/` | read-only, or deny | finished deliverables (slides, decks); rarely something Claude should edit |
+| `context/documents/slides/` | read-only, or deny | finished deliverables (slides, decks); rarely something Claude should edit |
 
 **Caveats worth knowing (confirmed against current Claude Code docs), not just assumed:**
 

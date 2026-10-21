@@ -25,32 +25,30 @@ context/
 ├── main-log.md               # chronological activity log, one entry per logged event, appended
 │                             # to automatically by the summarise-* skills — see the file's own
 │                             # header
+├── meetings-log.md           # dated meeting tracker: schedule, status, outcomes and source links
 ├── communication/             # everything communicated, whether in a meeting or otherwise
 │   ├── meetings/
-│   │   ├── <name>.md         # reconciled, decision-focused summaries, directly in meetings/
-│   │   │                     # (see "summarise-meeting" below) — the trustworthy version, and
-│   │   │                     # the only thing here you normally need to read
-│   │   └── scratch/
-│   │       ├── transcripts/      # raw transcripts — ground truth, but messy
-│   │       └── gemini-summaries/ # fast AI-generated summaries — lossy, sometimes overconfident paraphrasing
+│   │   └── <name>.md         # reconciled, decision-focused summaries, directly in meetings/
+│   │                         # (see "summarise-meeting" below) — the trustworthy version, and
+│   │                         # the only thing here you normally need to read
 │   ├── emails/               # reformatted email threads
 │   ├── direct-messages/      # reformatted chat/DM pastes
-│   ├── offline/              # cleaned-up recaps of in-person/phone/unrecorded conversations
-│   └── scratch/               # the untouched original of every email/DM/offline recap above, in
-│       ├── emails/            # its original format, one-to-one by name. Claude never reads this
-│       ├── direct-messages/   # back — it's a write-only archive kept purely for a human's future
-│       └── offline/           # reference, not a working source (see summarise-communication skill).
-└── misc/                     # non-context knowledge that isn't project decisions/comms — domain
-                              # primers, running lessons-learned, per-project Claude operational
-                              # notes, and everything below. See project-skeleton.md §3 for the
-                              # access table (parts of misc/ are read-only, secrets are denied
-                              # outright).
-    ├── diagrams/             # Excalidraw/other diagram source files
-    ├── important-documents/
-    │   └── slides/           # decks, reference materials, pptx exports — finished deliverables,
-    │                         # normally read-only or denied to Claude (see project-skeleton.md §3)
-    └── notes/                # freeform per-topic deep dives — not scaffolded by default, add it
-                              # here (not at the project root) once there's an actual need
+│   └── scratch/              # untouched communication originals
+│       ├── meetings/         # fallback sources when no reconciled summary exists yet
+│       │   ├── transcripts/      # raw transcripts — ground truth, but messy
+│       │   └── gemini-summaries/ # fast AI-generated summaries — lossy, sometimes overconfident
+│       ├── emails/           # email/DM originals are write-only archives for humans
+│       └── direct-messages/
+├── documents/               # reference documents and finished deliverables
+│   ├── diagrams/            # Excalidraw/other diagram source files
+│   ├── primers/             # domain refreshers and methodology explainers
+│   └── slides/              # finished decks and pptx exports; normally read-only or denied
+└── misc/
+    ├── demos/               # demo assets and walkthroughs
+    ├── notes/               # freeform per-topic deep dives
+    ├── secrets/             # denied to Claude; never commit credentials
+    ├── test-tools/          # reusable testing utilities and fixtures
+    └── project-skeleton.md  # project setup checklist and access rules
 ```
 
 `todo-project.md` (renamed `todo-<slug>.md` at kickoff, same treatment as `repo-project/` below) —
@@ -59,14 +57,15 @@ is the one non-code file that lives at the *project root*, not under `context/`,
 file you actually write into most often. Everything else non-code is under `context/`;
 `main-summary.md` stays Claude-maintained, not a scratchpad.
 
-Deliberately minimal to start: `misc/notes/` (freeform topic notes) and `planning/` (checklists,
-plan docs, still at the `context/` top level) aren't scaffolded by default — add them per-project
-once there's an actual need, rather than carrying empty structure from day one. Same
-`notes-<subject>.md` convention as before if/when you add `misc/notes/`; split into a subfolder per
-workstream (e.g. `misc/notes/data/`, mirroring `repo-project/scripts/preprocessing/` on a
-data-heavy project) if it grows past a handful of files.
+Reference documents live under `context/documents/`; add source-specific folders such as
+`documents/google-drive/` when needed. Diagrams, primers and slides live in `documents/`. Demos, topic notes and test tools stay in `misc/`.
 
-`context/` is the whole non-code side of the project (`misc/`, meeting/communication
+`misc/notes/` holds freeform topic notes. Use `notes-<subject>.md`; split into a subfolder per
+workstream (e.g. `misc/notes/data/`, mirroring `repo-project/scripts/preprocessing/` on a
+data-heavy project) if it grows past a handful of files. Add `planning/` at the `context/` top
+level only when needed.
+
+`context/` is the whole non-code side of the project (`documents/`, `misc/`, meeting/communication
 records) except `todo-project.md`, which sits at the project root alongside it. See
 [`context/misc/project-skeleton.md`](context/misc/project-skeleton.md) §1 for why the project root
 ends up being just `context/`, `todo-<slug>.md`, `repo-<slug>/`, and `.claude/`.
@@ -87,22 +86,35 @@ The one file a future reader (human or Claude) should read first to get oriented
 
 See `context/main-summary.md` for a filled-in skeleton with prompts for each section.
 
+## `meetings-log.md` — the meeting tracker
+
+A chronological table of dated meetings: date, time, meeting, status, and a short outcome with
+links to notes and scheduling evidence. Keep scheduled events, cancellations and reschedules;
+RSVPs are separate from attendance, and outcomes need notes or confirmation. State the timezone,
+when calendars were last checked and when meeting outcomes were last updated. Record recurring
+cadence and open schedule questions below the table.
+
+Update the matching row whenever meeting notes are processed, including an explicit label for
+unverified source-only records. Detailed records stay in `communication/meetings/`, decisions in
+`main-summary.md`, and completed work in `main-log.md`. See [the template](context/meetings-log.md)
+for the columns and maintenance rules.
+
 ## How context gets in
 
 Four intake paths — three backed by skills, one manual:
 
 1. **A meeting with a transcript** → the `summarise-meeting` skill. Cross-checks the fast Gemini auto-summary against the full raw transcript, catches places where the paraphrase doesn't match what was actually said, writes a reconciled decision-focused summary directly to `communication/meetings/<name>.md`, then propagates any confirmed decisions into `main-summary.md`'s Key Decisions table (and other sections they touch) so the living summary doesn't go stale.
-2. **A chat log, an email thread, or a spoken conversation with no transcript at all** → the `summarise-communication` skill. First classifies which of the three it's looking at, saves the untouched original to `communication/scratch/`, then reformats/archives a cleaned-up (verbatim, not summarized) copy to the matching `communication/` subfolder — the skill itself carries the per-type formatting rules, so there's no separate style guide to consult. Then extracts decisions, action items, and open questions and saves those into whichever of the structures above already fits (or into `main-summary.md` directly for something that belongs at the top level, like a scope change).
+2. **A chat log, an email thread, or a spoken conversation with no transcript at all** → the `summarise-communication` skill. Saves email/chat originals to `communication/scratch/`, then reformats/archives a cleaned-up (verbatim, not summarized) copy to the matching `communication/` subfolder. Spoken recaps go into `communication/meetings/`, clearly labelled as recaps without transcript verification — the skill itself carries the per-type formatting rules, so there's no separate style guide to consult. Then extracts decisions, action items, and open questions and saves those into whichever of the structures above already fits (or into `main-summary.md` directly for something that belongs at the top level, like a scope change).
 3. **Any other new artifact relevant to the project** — a repo someone shares, a spec doc, a dataset description, a one-off link — that doesn't fit either shape above → the `update-project-context` skill. Actually looks at the artifact (e.g. `gh repo view`/clones a repo rather than guessing from the URL), checks it against what `main-summary.md` and `misc/notes/` already know, and routes only what's genuinely new to wherever the template already keeps that kind of thing (decisions → `main-summary.md`, a technical deep-dive → `misc/notes/`, something that changes the actual codebase → `AGENTS.md`).
-4. **Manual notes** — written by hand into `todo-project.md` while working day-to-day, or into a `misc/notes/` directory (created when there's an actual need — see "The structure" above) for something that deserves its own topic file. Not skill-mediated, just following the same conventions so it stays discoverable later instead of living only in a scratch file that gets deleted.
+4. **Manual notes** — written by hand into `todo-project.md` while working day-to-day, or into the `misc/notes/` directory for something that deserves its own topic file. Not skill-mediated, just following the same conventions so it stays discoverable later instead of living only in a scratch file that gets deleted.
 
 ## Conventions
 
 - **`[[wikilink]]` cross-references.** `main-summary.md` links out to topic notes by filename stem (e.g. "see `[[notes-gqv]]`"), Obsidian-style — keeps notes individually readable but connected without duplicating content into `main-summary.md` itself.
 - **Date-stamp and attribute every logged decision.** `**Redefined 2026-07-14 (per Dewi)**`, not just "we changed this." A decision without a date and an owner is unverifiable later, and worse, un-overridable — nobody can tell if it's still current.
-- **Meeting filenames: `YYYYMMDD-attendee[-attendee2].md`.** Matched exactly across `communication/meetings/scratch/transcripts/`, `communication/meetings/scratch/gemini-summaries/`, and the reconciled `communication/meetings/<name>.md`, so the three can be cross-referenced by name alone and a missing pairing is obvious at a glance. `communication/{emails,direct-messages,offline}/` and their `communication/scratch/` originals follow the same convention.
-- **Reformat communication, don't paraphrase it.** Light cleanup only per source type — strip email signature blocks/quote-nesting, strip chat read-receipts/reaction noise, lightly clean up an offline recap — but preserve exact numbers, dates, and commitments verbatim. Handled by the `summarise-communication` skill, which carries the per-type rules directly rather than a separate style guide.
-- **`communication/scratch/` is write-only.** It holds each source's untouched original, kept purely for a human's future reference in its original format — Claude never reads it back, full stop (unlike `communication/meetings/scratch/`, which is a legitimate fallback when no reconciled summary exists yet; see `repo-project/AGENTS.md`).
+- **Meeting filenames: `YYYYMMDD-attendee[-attendee2].md`.** Matched exactly across `communication/scratch/meetings/transcripts/`, `communication/scratch/meetings/gemini-summaries/`, and the reconciled `communication/meetings/<name>.md`, so the three can be cross-referenced by name alone and a missing pairing is obvious at a glance. `communication/{emails,direct-messages}/` and their `communication/scratch/` originals follow the same convention.
+- **Reformat communication, don't paraphrase it.** Light cleanup only per source type — strip email signature blocks/quote-nesting, strip chat read-receipts/reaction noise — but preserve exact numbers, dates, and commitments verbatim. Handled by the `summarise-communication` skill, which carries the per-type rules directly rather than a separate style guide.
+- **`communication/scratch/` holds untouched originals.** Email and DM originals are write-only archives kept purely for a human's future reference — Claude never reads them back. `communication/scratch/meetings/` is the exception: it is a legitimate fallback when no reconciled summary exists yet (see `repo-project/AGENTS.md`).
 - **Never commit raw client data or secrets.** A scratch/raw-data dump directory (e.g. `context/misc/`) stays gitignored. Treat the whole repo as if it could go public, even when it's private.
 
 ## Setting up a new project

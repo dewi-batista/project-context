@@ -38,6 +38,8 @@ This document is a living summary of [project name]. It captures the project's g
 
 ## Timeline
 
+See [the meetings log](meetings-log.md) for dated invitations, meeting status and links to notes.
+
 | Phase | Weeks | Key milestone |
 |---|---|---|
 

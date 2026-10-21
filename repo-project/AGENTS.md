@@ -16,22 +16,27 @@ see `~/Documents/cromen-wyllt/work/project-context/README.md` for the full patte
 project history matters — it has the full reading order, kept there as the single source of truth
 so it doesn't drift from this file.
 
-Two directories are always off-limits to read directly, regardless of what `get-context` says:
-`context/communication/meetings/scratch/` (raw transcripts/gemini-summaries — read only as a
-documented fallback when no reconciled summary exists yet) and `context/communication/scratch/`
-(untouched communication originals, written once by the `summarise-communication` skill — never
-read back at all, purely a human's future-reference archive).
+Do not read `context/communication/scratch/` during normal orientation, regardless of what
+`get-context` says. Its `meetings/` subdirectory holds raw transcripts/gemini-summaries — read
+only as a documented fallback when no reconciled summary exists yet. Its email and DM
+originals are written once by the `summarise-communication` skill and never read back at all;
+they are purely a human's future-reference archive.
 
 ## Logging new context
 
 - **After each meeting**, run the `summarise-meeting` skill (`/summarise-meeting`) to reconcile the
-  Gemini transcript + AI summary (read from `context/communication/meetings/scratch/`) into
+  Gemini transcript + AI summary (read from `context/communication/scratch/meetings/`) into
   `context/communication/meetings/<name>.md`. Do this soon after the meeting, not batched up — reconciliation
   works best while the transcript is easy to spot-check and the decision log is still fresh context
   for catching discrepancies.
 - **For everything else** — a pasted chat log, an email thread, a spoken conversation with no
   transcript — use the `summarise-communication` skill to extract decisions/action items and file
-  them into the right place under `context/`.
+  them into the right place under `context/`. Spoken recaps go in
+  `context/communication/meetings/`, labelled as recaps without transcript verification.
+- **Keep `context/meetings-log.md` current:** after processing a meeting, update its dated row
+  with status, a short outcome and a link to notes. Follow the log's maintenance rules: separate
+  RSVPs from attendance, preserve cancellations, qualify unverified records and record the
+  timezone and source-check dates.
 - Both skills append an entry to `context/main-log.md` if it exists (a chronological activity log
   — see that file's own header for what it's for).
 - **Decisions get a date and an owner** wherever they're logged: `**Redefined 2026-07-14 (per
