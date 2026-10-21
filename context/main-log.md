@@ -6,9 +6,11 @@ last, each linking to where the full detail actually lives. Not a replacement fo
 scanning "what happened, in what order" without reconstructing it from timestamps scattered across
 `communication/` (meetings included) and `misc/notes/`.
 
-Appended to automatically by the `summarise-meeting` and `summarise-communication` skills whenever they
-write something; add a manual entry yourself for anything else worth timestamping (a decision made
-outside any logged source, a scope change, whatever doesn't fit the automated paths).
+Maintained after meaningful completed work as well as meeting/communication intake.
+Follow the completion logging rules in the workspace [AGENTS.md](../AGENTS.md): record
+each durable outcome once, link to its implementation or artifact, and include relevant
+validation, branch/commit and deployment status. Routine questions and read-only checks
+need no entry. Update `main-summary.md` only when current facts or decisions change.
 
 **Format:** `- YYYY-MM-DD — <one-line description> ([link](relative/path/to/file.md))`
 

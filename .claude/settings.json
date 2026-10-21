@@ -1,11 +1,11 @@
 {
   "permissions": {
-    "allow": [
-    ],
+    "allow": [],
     "deny": [
-      "Read(context/misc/secrets/**)"
+      "Read(/context/misc/secrets/**)",
+      "Edit(/context/misc/secrets/**)",
+      "Edit(/todo-*.md)"
     ],
-    "ask": [
-    ]
+    "ask": []
   }
 }

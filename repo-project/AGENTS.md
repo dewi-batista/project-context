@@ -10,11 +10,12 @@ as-is.
 
 ## Getting context
 
-`context/` (sibling to this repo, never git-tracked here) holds the project's durable history —
-see `~/Documents/cromen-wyllt/work/project-context/README.md` for the full pattern. Run the `get-context` skill
-(`/get-context`) when asked to "get context" on the project, or at the start of a new session where
-project history matters — it has the full reading order, kept there as the single source of truth
-so it doesn't drift from this file.
+Read the workspace [AGENTS.md](../AGENTS.md) for personal TODO protection,
+completion logging and folder conventions. These apply alongside this repository's
+instructions. Private project context is in `../context/`; paths below beginning
+`context/` are relative to the workspace root, not this repository.
+Use `../context/main-summary.md` for the current project summary and
+`../context/misc/project-skeleton.md` for kickoff decisions.
 
 Do not read `context/communication/scratch/` during normal orientation, regardless of what
 `get-context` says. Its `meetings/` subdirectory holds raw transcripts/gemini-summaries — read

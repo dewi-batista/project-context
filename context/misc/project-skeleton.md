@@ -22,6 +22,7 @@ point to tweak per project, not a final answer.
   context/                    See README.md. Obsidian-only, never git-tracked (or tracked in its
                                own separate, unpublished history) — not part of repo-project/'s git repo.
     documents/
+      README.md                canonical document index and shared-source locations
       diagrams/                Excalidraw/other diagram source files
       primers/                 domain refreshers (stats/ML concepts, methodology explainers)
       slides/                  decks, reference materials, pptx exports
@@ -37,20 +38,29 @@ point to tweak per project, not a final answer.
   todo-project.md              RENAME to todo-<slug> at kickoff (e.g. todo-es), same as
                                repo-project/ below. Day-to-day working notes: agenda/prep for the
                                next call, plus a running todo list — the file you actually write
-                               into. The one non-code file that lives at project root, not under
-                               context/, since it's the thing you touch most often.
+                               into. Kept at project root alongside workspace instructions,
+                               since it's the thing you touch most often.
   repo-project/                RENAME to repo-<slug> at kickoff (e.g. repo-es) — the ONLY
                                git-tracked directory — see §2 (includes commit-guide.md, since
                                it's the only directory commits actually apply to). If you rename
                                it, update the repo-project/ paths in this file's own access table
                                (§3) and in .claude/settings.json to match.
+  AGENTS.md                   workspace rules: TODO protection, completion logging, folder conventions
+  CLAUDE.md                   imports AGENTS.md for Claude Code
   .claude/
     settings.json              project-level permission rules — see §3
 ```
 
-Everything that isn't code lives under `context/`, with the single exception of `todo-project.md`
-(renamed `todo-<slug>.md` at kickoff) — the project root ends up being `context/`, `todo-<slug>.md`,
-`repo-<slug>/`, and `.claude/` (tooling config, not project knowledge).
+Project knowledge lives under `context/`. The project root also holds `todo-<slug>.md`,
+`repo-<slug>/`, workspace `AGENTS.md`, its `CLAUDE.md` import and `.claude/` tooling settings.
+Copy both root instruction files at kickoff, update placeholder paths, fill in repository roles
+and working branches, and remove the template-maintenance paragraph from `AGENTS.md`.
+Index document sources in `context/documents/README.md`.
+
+The personal TODO remains readable. `.claude/settings.json` denies `Edit(/todo-*.md)`
+for built-in file modifications, including writes. If choosing a different filename pattern,
+update that rule at kickoff. Workspace instructions prohibit shell/script workarounds;
+permission rules alone are not OS-level write protection.
 
 **Why `context/` and `repo-project/` are strictly separate:** `context/` holds client-sensitive material
 (transcripts, internal decisions, sometimes PII-adjacent notes) that should never end up on a
@@ -109,6 +119,7 @@ in a `settings.json`, with per-tool, glob-scoped rules. Template at `.claude/set
 | Directory | Access | Why |
 |---|---|---|
 | `repo-project/**` | read-write | primary code (and any pipeline data/outputs it produces) Claude edits |
+| `todo-*.md` | read-only | Dewi's personal file; edit only on explicit request, never bypass deny rules |
 | `context/**` | read-write | Claude actively builds/maintains meeting summaries + decision log |
 | `context/documents/primers/`, `context/misc/lessons-learned.md` | read-only | reference material, shouldn't get silently rewritten |
 | `context/misc/claude-setup.md` | read-write | Claude updates this as new access/credentials get granted |

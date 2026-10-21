@@ -10,6 +10,10 @@ directory access rules. That file is the setup checklist: read and work through 
 kickoff, and fill in its per-project decisions (the repo rename, the access table) rather than just
 skimming it once. (`misc/` lives inside `context/` — see the structure below.)
 
+The workspace [AGENTS.md](AGENTS.md) owns personal TODO protection, completion logging and
+folder conventions; `repo-project/AGENTS.md` holds repository-specific instructions.
+`CLAUDE.md` imports the workspace instructions for Claude Code.
+
 ## Why
 
 Two failure modes this solves:
@@ -23,8 +27,7 @@ Two failure modes this solves:
 context/
 ├── main-summary.md           # the living project summary — Claude-maintained, not hand-written
 ├── main-log.md               # chronological activity log, one entry per logged event, appended
-│                             # to automatically by the summarise-* skills — see the file's own
-│                             # header
+│                             # after meaningful work and communication intake; see AGENTS.md
 ├── meetings-log.md           # dated meeting tracker: schedule, status, outcomes and source links
 ├── communication/             # everything communicated, whether in a meeting or otherwise
 │   ├── meetings/
@@ -40,6 +43,7 @@ context/
 │       ├── emails/           # email/DM originals are write-only archives for humans
 │       └── direct-messages/
 ├── documents/               # reference documents and finished deliverables
+│   ├── README.md            # index of canonical document locations and shared sources
 │   ├── diagrams/            # Excalidraw/other diagram source files
 │   ├── primers/             # domain refreshers and methodology explainers
 │   └── slides/              # finished decks and pptx exports; normally read-only or denied
@@ -53,8 +57,8 @@ context/
 
 `todo-project.md` (renamed `todo-<slug>.md` at kickoff, same treatment as `repo-project/` below) —
 day-to-day working notes, agenda/prep for the next call, plus a running todo list at the bottom —
-is the one non-code file that lives at the *project root*, not under `context/`, since it's the
-file you actually write into most often. Everything else non-code is under `context/`;
+is the day-to-day notes file at the *project root*, alongside workspace instructions, since it's the
+file you actually write into most often. Other project knowledge lives under `context/`;
 `main-summary.md` stays Claude-maintained, not a scratchpad.
 
 Reference documents live under `context/documents/`; add source-specific folders such as
@@ -132,6 +136,8 @@ cp -r ~/Documents/cromen-wyllt/work/project-context/context <path-to-new-project
 cp -r ~/Documents/cromen-wyllt/work/project-context/repo-project <path-to-new-project>/repo-project
 cp ~/Documents/cromen-wyllt/work/project-context/todo-project.md <path-to-new-project>/todo-project.md
 cp -r ~/Documents/cromen-wyllt/work/project-context/.claude <path-to-new-project>/.claude
+cp ~/Documents/cromen-wyllt/work/project-context/AGENTS.md <path-to-new-project>/AGENTS.md
+cp ~/Documents/cromen-wyllt/work/project-context/CLAUDE.md <path-to-new-project>/CLAUDE.md
 ```
 
 **Then open `context/misc/project-skeleton.md` and work through it** — it's the setup checklist,
@@ -139,6 +145,10 @@ not just background reading: rename `repo-project/` to `repo-<slug>/` and `todo-
 `todo-<slug>.md` (and update the references that name still needs fixing in `project-skeleton.md`
 itself and in `.claude/settings.json`), review the access table, and fill in
 `context/main-summary.md`'s placeholders and `repo-<slug>/AGENTS.md`'s project-specific sections.
+Ensure scaffolding copies both root instruction files and updates their renamed paths.
+The `Edit(/todo-*.md)` deny rule keeps personal TODO files readable while blocking built-in
+file modifications; instructions also prohibit shell/script workarounds. See
+[Claude permission rules](https://code.claude.com/docs/en/permissions#read-and-edit) for coverage.
 Then start logging as the project moves — don't wait until there's "enough" to write down.
 
 ## Related skills
